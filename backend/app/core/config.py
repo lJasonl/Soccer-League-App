@@ -1,1 +1,1 @@
-# Application entry point
+# Application configuration
