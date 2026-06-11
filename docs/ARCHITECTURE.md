@@ -1,0 +1,3 @@
+# Architecture
+
+Application architecture documentation.
