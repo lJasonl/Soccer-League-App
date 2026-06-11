@@ -10,13 +10,17 @@ class SoccerLeagueApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Soccer League',
+      title: 'Soccer League App',
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Soccer League'),
+          title: const Text('Soccer League App'),
         ),
         body: const Center(
-          child: Text('App Setup Complete'),
+          child: Text(
+            'Soccer League App Starting...',
+            style: TextStyle(fontSize: 24),
+          ),
         ),
       ),
     );
