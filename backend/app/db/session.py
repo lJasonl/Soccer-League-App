@@ -1,1 +1,1 @@
-# Application entry point
+# Database session management
