@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../players/players_screen.dart';
 import '../teams/teams_screen.dart';
 import '../schedules/schedules_screen.dart';
+import '../standings/standings_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -28,8 +29,7 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
-                        const TeamsScreen(),
+                    builder: (_) => const TeamsScreen(),
                   ),
                 );
               },
@@ -42,8 +42,7 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
-                        const PlayersScreen(),
+                    builder: (_) => const PlayersScreen(),
                   ),
                 );
               },
@@ -56,8 +55,7 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
-                        const SchedulesScreen(),
+                    builder: (_) => const SchedulesScreen(),
                   ),
                 );
               },
@@ -66,7 +64,14 @@ class DashboardScreen extends StatelessWidget {
               context,
               'Standings',
               Icons.emoji_events,
-              null,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const StandingsScreen(),
+                  ),
+                );
+              },
             ),
             _menuCard(
               context,
@@ -97,8 +102,7 @@ class DashboardScreen extends StatelessWidget {
       child: Card(
         elevation: 3,
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
