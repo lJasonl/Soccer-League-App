@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
 
-import '../../data/sample_teams.dart';
+import '../../services/team_data_service.dart';
+import 'add_team_screen.dart';
 import 'team_details_screen.dart';
 
-class TeamsScreen extends StatelessWidget {
+class TeamsScreen extends StatefulWidget {
   const TeamsScreen({super.key});
 
   @override
+  State<TeamsScreen> createState() => _TeamsScreenState();
+}
+
+class _TeamsScreenState extends State<TeamsScreen> {
+  @override
   Widget build(BuildContext context) {
+    final teams = TeamDataService.teams;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Teams'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddTeamScreen(),
+            ),
+          );
+
+          setState(() {});
+        },
+        child: const Icon(Icons.add),
+      ),
       body: ListView.builder(
-        itemCount: sampleTeams.length,
+        itemCount: teams.length,
         itemBuilder: (context, index) {
-          final team = sampleTeams[index];
+          final team = teams[index];
 
           return Card(
             margin: const EdgeInsets.symmetric(

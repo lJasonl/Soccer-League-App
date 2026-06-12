@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../players/players_screen.dart';
+import '../teams/teams_screen.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -20,32 +23,51 @@ class DashboardScreen extends StatelessWidget {
               context,
               'Teams',
               Icons.groups,
-              '/teams',
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const TeamsScreen(),
+                  ),
+                );
+              },
             ),
             _menuCard(
               context,
               'Players',
               Icons.person,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const PlayersScreen(),
+                  ),
+                );
+              },
             ),
             _menuCard(
               context,
               'Schedules',
               Icons.calendar_month,
+              null,
             ),
             _menuCard(
               context,
               'Standings',
               Icons.emoji_events,
+              null,
             ),
             _menuCard(
               context,
               'Payments',
               Icons.payment,
+              null,
             ),
             _menuCard(
               context,
               'Admin',
               Icons.admin_panel_settings,
+              null,
             ),
           ],
         ),
@@ -56,27 +78,20 @@ class DashboardScreen extends StatelessWidget {
   Widget _menuCard(
     BuildContext context,
     String title,
-    IconData icon, [
-    String? route,
-  ]) {
+    IconData icon,
+    VoidCallback? onTap,
+  ) {
     return InkWell(
-      onTap: () {
-        if (route != null) {
-          Navigator.pushNamed(context, route);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('$title module coming soon'),
-            ),
-          );
-        }
-      },
+      onTap: onTap,
       child: Card(
         elevation: 3,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 50),
+            Icon(
+              icon,
+              size: 50,
+            ),
             const SizedBox(height: 10),
             Text(
               title,
