@@ -89,8 +89,8 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                   ),
                   title: Text(player.fullName),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => PlayerDetailsScreen(
@@ -98,6 +98,8 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                         ),
                       ),
                     );
+
+                    setState(() {});
                   },
                 ),
               ),

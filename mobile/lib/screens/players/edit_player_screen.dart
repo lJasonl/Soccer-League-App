@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/player.dart';
+import '../../services/league_data_service.dart';
 
 class EditPlayerScreen extends StatefulWidget {
   final Player player;
@@ -70,11 +71,23 @@ class _EditPlayerScreenState extends State<EditPlayerScreen> {
   }
 
   void _saveChanges() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Edit functionality coming next'),
-      ),
+    final updatedPlayer = Player(
+      id: widget.player.id,
+      teamId: widget.player.teamId,
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      jerseyNumber:
+          int.tryParse(_jerseyNumberController.text) ?? 0,
+      birthYear:
+          int.tryParse(_birthYearController.text) ?? 0,
+      parentName: _parentNameController.text,
+      parentPhone: _parentPhoneController.text,
+      registrationStatus: _registrationStatus,
     );
+
+    LeagueDataService.updatePlayer(updatedPlayer);
+
+    Navigator.pop(context);
   }
 
   @override
