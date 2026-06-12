@@ -50,7 +50,7 @@ class _EditTeamScreenState
     super.dispose();
   }
 
-  void _saveTeam() {
+  Future<void> _saveTeam() async {
     final updatedTeam = Team(
       id: widget.team.id,
       name: _teamNameController.text,
@@ -58,7 +58,11 @@ class _EditTeamScreenState
       coach: _coachController.text,
     );
 
-    TeamDataService.updateTeam(updatedTeam);
+    await TeamDataService.updateTeam(
+      updatedTeam,
+    );
+
+    if (!mounted) return;
 
     Navigator.pop(context);
   }
@@ -126,8 +130,9 @@ class _EditTeamScreenState
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _saveTeam,
-                child:
-                    const Text('Save Changes'),
+                child: const Text(
+                  'Save Changes',
+                ),
               ),
             ),
           ],

@@ -48,9 +48,11 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
     );
 
     if (confirmed == true) {
-      TeamDataService.deleteTeam(
+      await TeamDataService.deleteTeam(
         widget.team.id,
       );
+
+      if (!mounted) return;
 
       Navigator.pop(context);
     }
@@ -132,9 +134,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
             const Text(
               'Players',
               style: TextStyle(
@@ -142,9 +142,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 8),
-
             ...teamPlayers.map(
               (player) => Card(
                 child: ListTile(

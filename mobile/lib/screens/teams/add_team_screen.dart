@@ -25,7 +25,7 @@ class _AddTeamScreenState extends State<AddTeamScreen> {
     super.dispose();
   }
 
-  void _saveTeam() {
+  Future<void> _saveTeam() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -37,7 +37,9 @@ class _AddTeamScreenState extends State<AddTeamScreen> {
       coach: _coachController.text,
     );
 
-    TeamDataService.addTeam(team);
+    await TeamDataService.addTeam(team);
+
+    if (!mounted) return;
 
     Navigator.pop(context);
   }
