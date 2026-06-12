@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'theme/app_theme.dart';
+import 'router/app_router.dart';
+
 void main() {
   runApp(const SoccerLeagueApp());
 }
@@ -12,17 +15,9 @@ class SoccerLeagueApp extends StatelessWidget {
     return MaterialApp(
       title: 'Soccer League App',
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Soccer League App'),
-        ),
-        body: const Center(
-          child: Text(
-            'Soccer League App Starting...',
-            style: TextStyle(fontSize: 24),
-          ),
-        ),
-      ),
+      theme: AppTheme.lightTheme,
+      initialRoute: '/',
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }
