@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/player.dart';
+import 'edit_player_screen.dart';
 
 class PlayerDetailsScreen extends StatelessWidget {
   final Player player;
@@ -15,6 +16,21 @@ class PlayerDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(player.fullName),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => EditPlayerScreen(
+                    player: player,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -64,14 +80,6 @@ class PlayerDetailsScreen extends StatelessWidget {
                 leading: const Icon(Icons.badge),
                 title: const Text('Registration Status'),
                 subtitle: Text(player.registrationStatus),
-              ),
-            ),
-
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.medical_services),
-                title: Text('Medical Information'),
-                subtitle: Text('Not entered'),
               ),
             ),
           ],
