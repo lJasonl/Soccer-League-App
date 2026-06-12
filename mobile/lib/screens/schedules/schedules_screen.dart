@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/game_data_service.dart';
 import 'add_game_screen.dart';
+import 'edit_game_screen.dart';
 
 class SchedulesScreen extends StatefulWidget {
   const SchedulesScreen({super.key});
@@ -13,6 +14,50 @@ class SchedulesScreen extends StatefulWidget {
 
 class _SchedulesScreenState
     extends State<SchedulesScreen> {
+  Future<void> _deleteGame(
+    String gameId,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Game'),
+          content: const Text(
+            'Are you sure you want to delete this game?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  false,
+                );
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  true,
+                );
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      GameDataService.deleteGame(
+        gameId,
+      );
+
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final games = GameDataService.games;
@@ -54,6 +99,40 @@ class _SchedulesScreenState
               ),
               subtitle: Text(
                 '${game.gameDate} • ${game.gameTime}\n${game.field}',
+              ),
+              trailing: Row(
+                mainAxisSize:
+                    MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                    ),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              EditGameScreen(
+                            game: game,
+                          ),
+                        ),
+                      );
+
+                      setState(() {});
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                    ),
+                    onPressed: () {
+                      _deleteGame(
+                        game.id,
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           );
