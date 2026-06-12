@@ -1,22 +1,46 @@
 import 'package:flutter/material.dart';
 
-class TeamDetailsScreen extends StatelessWidget {
-  final String teamName;
-  final String division;
-  final String coach;
+import '../../models/team.dart';
+import '../../services/league_data_service.dart';
+import '../players/player_details_screen.dart';
+import '../players/add_player_screen.dart';
+
+class TeamDetailsScreen extends StatefulWidget {
+  final Team team;
 
   const TeamDetailsScreen({
     super.key,
-    required this.teamName,
-    required this.division,
-    required this.coach,
+    required this.team,
   });
 
   @override
+  State<TeamDetailsScreen> createState() => _TeamDetailsScreenState();
+}
+
+class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
+  @override
   Widget build(BuildContext context) {
+    final teamPlayers =
+        LeagueDataService.getPlayersForTeam(widget.team.id);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(teamName),
+        title: Text(widget.team.name),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AddPlayerScreen(
+                teamId: widget.team.id,
+              ),
+            ),
+          );
+
+          setState(() {});
+        },
+        child: const Icon(Icons.add),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -29,15 +53,15 @@ class TeamDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      teamName,
+                      widget.team.name,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text('Division: $division'),
-                    Text('Coach: $coach'),
+                    Text('Division: ${widget.team.division}'),
+                    Text('Coach: ${widget.team.coach}'),
                   ],
                 ),
               ),
@@ -45,27 +69,37 @@ class TeamDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.people),
-                title: Text('Players'),
-                subtitle: Text('No players added yet'),
+            const Text(
+              'Players',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.calendar_month),
-                title: Text('Schedule'),
-                subtitle: Text('No games scheduled'),
-              ),
-            ),
+            const SizedBox(height: 8),
 
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.emoji_events),
-                title: Text('Standings'),
-                subtitle: Text('Wins: 0  Losses: 0  Draws: 0'),
+            ...teamPlayers.map(
+              (player) => Card(
+                child: ListTile(
+                  leading: CircleAvatar(
+                    child: Text(
+                      player.jerseyNumber.toString(),
+                    ),
+                  ),
+                  title: Text(player.fullName),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PlayerDetailsScreen(
+                          player: player,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],

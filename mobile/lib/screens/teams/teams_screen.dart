@@ -33,10 +33,8 @@ class TeamsScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TeamDetailsScreen(
-                      teamName: team.name,
-                      division: team.division,
-                      coach: team.coach,
+                    builder: (_) => TeamDetailsScreen(
+                      team: team,
                     ),
                   ),
                 );
