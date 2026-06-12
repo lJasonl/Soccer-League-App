@@ -4,6 +4,7 @@ import '../players/players_screen.dart';
 import '../teams/teams_screen.dart';
 import '../schedules/schedules_screen.dart';
 import '../standings/standings_screen.dart';
+import '../games/games_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -56,6 +57,19 @@ class DashboardScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => const SchedulesScreen(),
+                  ),
+                );
+              },
+            ),
+            _menuCard(
+              context,
+              'Games',
+              Icons.sports_soccer,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const GamesScreen(),
                   ),
                 );
               },

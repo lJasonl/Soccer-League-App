@@ -5,6 +5,7 @@ import 'theme/app_theme.dart';
 import 'router/app_router.dart';
 import 'services/storage_service.dart';
 import 'services/team_data_service.dart';
+import 'services/game_data_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,7 @@ Future<void> main() async {
   await StorageService.initialize();
 
   await TeamDataService.loadTeams();
+  await GameDataService.loadGames();
 
   runApp(
     const SoccerLeagueApp(),
