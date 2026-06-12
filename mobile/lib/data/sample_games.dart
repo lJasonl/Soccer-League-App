@@ -8,6 +8,8 @@ final List<Game> sampleGames = [
     gameDate: '2026-09-05',
     gameTime: '9:00 AM',
     field: 'Field 1',
+    homeScore: 0,
+    awayScore: 0,
   ),
   const Game(
     id: '2',
@@ -16,5 +18,7 @@ final List<Game> sampleGames = [
     gameDate: '2026-09-05',
     gameTime: '10:30 AM',
     field: 'Field 2',
+    homeScore: 0,
+    awayScore: 0,
   ),
 ];

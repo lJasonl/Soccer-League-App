@@ -48,6 +48,8 @@ class _AddGameScreenState
       gameDate: _dateController.text,
       gameTime: _timeController.text,
       field: _fieldController.text,
+      homeScore: 0,
+      awayScore: 0,
     );
 
     GameDataService.addGame(game);
@@ -71,45 +73,35 @@ class _AddGameScreenState
                 labelText: 'Home Team',
               ),
             ),
-
             const SizedBox(height: 16),
-
             TextField(
               controller: _awayTeamController,
               decoration: const InputDecoration(
                 labelText: 'Away Team',
               ),
             ),
-
             const SizedBox(height: 16),
-
             TextField(
               controller: _dateController,
               decoration: const InputDecoration(
                 labelText: 'Game Date',
               ),
             ),
-
             const SizedBox(height: 16),
-
             TextField(
               controller: _timeController,
               decoration: const InputDecoration(
                 labelText: 'Game Time',
               ),
             ),
-
             const SizedBox(height: 16),
-
             TextField(
               controller: _fieldController,
               decoration: const InputDecoration(
                 labelText: 'Field',
               ),
             ),
-
             const SizedBox(height: 24),
-
             ElevatedButton(
               onPressed: _saveGame,
               child: const Text('Save Game'),

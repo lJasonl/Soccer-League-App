@@ -81,6 +81,8 @@ class _EditGameScreenState
       gameDate: _dateController.text,
       gameTime: _timeController.text,
       field: _fieldController.text,
+      homeScore: widget.game.homeScore,
+      awayScore: widget.game.awayScore,
     );
 
     GameDataService.updateGame(

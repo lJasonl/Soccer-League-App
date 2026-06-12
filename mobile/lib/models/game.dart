@@ -6,6 +6,9 @@ class Game {
   final String gameTime;
   final String field;
 
+  final int homeScore;
+  final int awayScore;
+
   const Game({
     required this.id,
     required this.homeTeam,
@@ -13,5 +16,7 @@ class Game {
     required this.gameDate,
     required this.gameTime,
     required this.field,
+    required this.homeScore,
+    required this.awayScore,
   });
 }

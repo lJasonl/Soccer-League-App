@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/game_data_service.dart';
 import 'add_game_screen.dart';
 import 'edit_game_screen.dart';
+import 'game_result_screen.dart';
 
 class SchedulesScreen extends StatefulWidget {
   const SchedulesScreen({super.key});
@@ -91,6 +92,19 @@ class _SchedulesScreenState
               vertical: 6,
             ),
             child: ListTile(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        GameResultScreen(
+                      game: game,
+                    ),
+                  ),
+                );
+
+                setState(() {});
+              },
               leading: const Icon(
                 Icons.sports_soccer,
               ),
@@ -98,7 +112,9 @@ class _SchedulesScreenState
                 '${game.homeTeam} vs ${game.awayTeam}',
               ),
               subtitle: Text(
-                '${game.gameDate} • ${game.gameTime}\n${game.field}',
+                '${game.gameDate} • ${game.gameTime}\n'
+                '${game.field}\n'
+                'Score: ${game.homeScore} - ${game.awayScore}',
               ),
               trailing: Row(
                 mainAxisSize:
