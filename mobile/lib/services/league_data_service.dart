@@ -2,9 +2,12 @@ import '../models/player.dart';
 import '../data/sample_players.dart';
 
 class LeagueDataService {
-  static final List<Player> players = List.from(samplePlayers);
+  static final List<Player> players =
+      List.from(samplePlayers);
 
-  static List<Player> getPlayersForTeam(String teamId) {
+  static List<Player> getPlayersForTeam(
+    String teamId,
+  ) {
     return players.where((player) {
       return player.teamId == teamId;
     }).toList();
@@ -14,7 +17,9 @@ class LeagueDataService {
     players.add(player);
   }
 
-  static void updatePlayer(Player updatedPlayer) {
+  static void updatePlayer(
+    Player updatedPlayer,
+  ) {
     final index = players.indexWhere(
       (player) => player.id == updatedPlayer.id,
     );
@@ -24,7 +29,9 @@ class LeagueDataService {
     }
   }
 
-  static void deletePlayer(String playerId) {
+  static void deletePlayer(
+    String playerId,
+  ) {
     players.removeWhere(
       (player) => player.id == playerId,
     );
