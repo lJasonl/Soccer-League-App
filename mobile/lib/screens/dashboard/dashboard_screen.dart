@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../admin/screen.dart' as admin;
+import '../games/games_screen.dart';
+import '../payments/screen.dart';
 import '../players/players_screen.dart';
-import '../teams/teams_screen.dart';
+import '../registrations/screen.dart';
 import '../schedules/schedules_screen.dart';
 import '../standings/standings_screen.dart';
-import '../games/games_screen.dart';
+import '../teams/teams_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -13,7 +16,9 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Soccer League Dashboard'),
+        title: const Text(
+          'Darke County Soccer Association',
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -30,7 +35,8 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const TeamsScreen(),
+                    builder: (_) =>
+                        const TeamsScreen(),
                   ),
                 );
               },
@@ -43,7 +49,8 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const PlayersScreen(),
+                    builder: (_) =>
+                        const PlayersScreen(),
                   ),
                 );
               },
@@ -56,7 +63,8 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const SchedulesScreen(),
+                    builder: (_) =>
+                        const SchedulesScreen(),
                   ),
                 );
               },
@@ -69,7 +77,8 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const GamesScreen(),
+                    builder: (_) =>
+                        const GamesScreen(),
                   ),
                 );
               },
@@ -82,7 +91,22 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const StandingsScreen(),
+                    builder: (_) =>
+                        const StandingsScreen(),
+                  ),
+                );
+              },
+            ),
+            _menuCard(
+              context,
+              'Registrations',
+              Icons.app_registration,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const RegistrationsScreen(),
                   ),
                 );
               },
@@ -91,13 +115,29 @@ class DashboardScreen extends StatelessWidget {
               context,
               'Payments',
               Icons.payment,
-              null,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const PaymentsScreen(),
+                  ),
+                );
+              },
             ),
             _menuCard(
               context,
               'Admin',
               Icons.admin_panel_settings,
-              null,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const admin.Screen(),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -116,7 +156,8 @@ class DashboardScreen extends StatelessWidget {
       child: Card(
         elevation: 3,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment:
+              MainAxisAlignment.center,
           children: [
             Icon(
               icon,

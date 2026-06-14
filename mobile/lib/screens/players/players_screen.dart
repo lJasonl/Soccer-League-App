@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 import '../../services/league_data_service.dart';
 import 'player_details_screen.dart';
 
-class PlayersScreen extends StatelessWidget {
+class PlayersScreen extends StatefulWidget {
   const PlayersScreen({super.key});
 
+  @override
+  State<PlayersScreen> createState() =>
+      _PlayersScreenState();
+}
+
+class _PlayersScreenState
+    extends State<PlayersScreen> {
   @override
   Widget build(BuildContext context) {
     final players = LeagueDataService.players;
@@ -37,15 +44,18 @@ class PlayersScreen extends StatelessWidget {
               trailing: const Icon(
                 Icons.chevron_right,
               ),
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => PlayerDetailsScreen(
+                    builder: (_) =>
+                        PlayerDetailsScreen(
                       player: player,
                     ),
                   ),
                 );
+
+                setState(() {});
               },
             ),
           );
