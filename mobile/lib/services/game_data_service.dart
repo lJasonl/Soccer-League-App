@@ -15,14 +15,23 @@ class GameDataService {
       final data = Map<String, dynamic>.from(item);
 
       return Game(
-        id: data['id'],
-        homeTeam: data['homeTeam'],
-        awayTeam: data['awayTeam'],
-        gameDate: data['gameDate'],
-        gameTime: data['gameTime'],
-        field: data['field'],
-        homeScore: data['homeScore'],
-        awayScore: data['awayScore'],
+        id: data['id'] ?? '',
+        homeTeam: data['homeTeam'] ?? '',
+        awayTeam: data['awayTeam'] ?? '',
+        gameDate: data['gameDate'] ?? '',
+        gameTime: data['gameTime'] ?? '',
+        field: data['field'] ?? '',
+
+        // Backward compatible
+        refereeId:
+            data['refereeId'] ?? '',
+        refereeName:
+            data['refereeName'] ?? '',
+
+        homeScore:
+            data['homeScore'] ?? 0,
+        awayScore:
+            data['awayScore'] ?? 0,
       );
     }).toList();
   }
@@ -40,6 +49,10 @@ class GameDataService {
         'gameDate': game.gameDate,
         'gameTime': game.gameTime,
         'field': game.field,
+
+        'refereeId': game.refereeId,
+        'refereeName': game.refereeName,
+
         'homeScore': game.homeScore,
         'awayScore': game.awayScore,
       });
@@ -50,6 +63,7 @@ class GameDataService {
     Game game,
   ) async {
     games.add(game);
+
     await saveGames();
   }
 
@@ -62,6 +76,7 @@ class GameDataService {
 
     if (index != -1) {
       games[index] = updatedGame;
+
       await saveGames();
     }
   }

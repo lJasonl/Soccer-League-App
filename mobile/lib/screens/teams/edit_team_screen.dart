@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../models/coach.dart';
 import '../../models/team.dart';
+import '../../services/coach_data_service.dart';
 import '../../services/team_data_service.dart';
 
 class EditTeamScreen extends StatefulWidget {
@@ -21,10 +23,9 @@ class _EditTeamScreenState
   late final TextEditingController
       _teamNameController;
 
-  late final TextEditingController
-      _coachController;
-
   late String _division;
+
+  Coach? _selectedCoach;
 
   @override
   void initState() {
@@ -35,18 +36,23 @@ class _EditTeamScreenState
       text: widget.team.name,
     );
 
-    _coachController =
-        TextEditingController(
-      text: widget.team.coach,
-    );
-
     _division = widget.team.division;
+
+    if (widget.team.coachId.isNotEmpty) {
+      try {
+        _selectedCoach =
+            CoachDataService.coaches.firstWhere(
+          (coach) =>
+              coach.id ==
+              widget.team.coachId,
+        );
+      } catch (_) {}
+    }
   }
 
   @override
   void dispose() {
     _teamNameController.dispose();
-    _coachController.dispose();
     super.dispose();
   }
 
@@ -55,7 +61,11 @@ class _EditTeamScreenState
       id: widget.team.id,
       name: _teamNameController.text,
       division: _division,
-      coach: _coachController.text,
+      coachId:
+          _selectedCoach?.id ?? '',
+      coachName:
+          _selectedCoach?.fullName ??
+          '',
     );
 
     await TeamDataService.updateTeam(
@@ -69,26 +79,49 @@ class _EditTeamScreenState
 
   @override
   Widget build(BuildContext context) {
+    final availableCoaches =
+        CoachDataService.coaches.where(
+      (coach) {
+        if (coach.id ==
+            widget.team.coachId) {
+          return true;
+        }
+
+        return coach.isActive &&
+            !TeamDataService
+                .isCoachAssigned(
+              coach.id,
+            );
+      },
+    ).toList();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Team'),
+        title: const Text(
+          'Edit Team',
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(
-              controller: _teamNameController,
+              controller:
+                  _teamNameController,
               decoration:
                   const InputDecoration(
-                labelText: 'Team Name',
+                labelText:
+                    'Team Name',
               ),
             ),
-
-            const SizedBox(height: 16),
-
-            DropdownButtonFormField<String>(
-              initialValue: _division,
+            const SizedBox(
+              height: 16,
+            ),
+            DropdownButtonFormField<
+                String>(
+              initialValue:
+                  _division,
               items: const [
                 DropdownMenuItem(
                   value: 'U6',
@@ -109,28 +142,57 @@ class _EditTeamScreenState
               ],
               onChanged: (value) {
                 setState(() {
-                  _division = value!;
+                  _division =
+                      value!;
                 });
               },
             ),
-
-            const SizedBox(height: 16),
-
-            TextField(
-              controller: _coachController,
+            const SizedBox(
+              height: 16,
+            ),
+            DropdownButtonFormField<
+                Coach>(
+              initialValue:
+                  _selectedCoach,
               decoration:
                   const InputDecoration(
-                labelText: 'Coach Name',
+                labelText:
+                    'Coach',
               ),
+              items:
+                  availableCoaches
+                      .map(
+                        (coach) =>
+                            DropdownMenuItem<
+                                Coach>(
+                          value:
+                              coach,
+                          child: Text(
+                            coach
+                                .fullName,
+                          ),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (coach) {
+                setState(() {
+                  _selectedCoach =
+                      coach;
+                });
+              },
             ),
-
-            const SizedBox(height: 24),
-
+            const SizedBox(
+              height: 24,
+            ),
             SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _saveTeam,
-                child: const Text(
+              width:
+                  double.infinity,
+              child:
+                  ElevatedButton(
+                onPressed:
+                    _saveTeam,
+                child:
+                    const Text(
                   'Save Changes',
                 ),
               ),

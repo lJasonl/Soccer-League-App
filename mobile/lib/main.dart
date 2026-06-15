@@ -11,6 +11,9 @@ import 'services/registration_data_service.dart';
 import 'services/payment_data_service.dart';
 import 'services/settings_data_service.dart';
 import 'services/season_data_service.dart';
+import 'services/coach_data_service.dart';
+import 'services/referee_data_service.dart';
+import 'services/user_data_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +29,9 @@ Future<void> main() async {
   await PaymentDataService.loadPayments();
   await SettingsDataService.loadSettings();
   await SeasonDataService.loadSeasons();
+  await CoachDataService.loadCoaches();
+  await RefereeDataService.loadReferees();
+  await UserDataService.loadUsers();
 
   runApp(
     const SoccerLeagueApp(),

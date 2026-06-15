@@ -12,7 +12,9 @@ class SelectTeamScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Team'),
+        title: const Text(
+          'Select Team',
+        ),
       ),
       body: ListView.builder(
         itemCount: teams.length,
@@ -20,15 +22,17 @@ class SelectTeamScreen extends StatelessWidget {
           final team = teams[index];
 
           return Card(
-            margin: const EdgeInsets.symmetric(
+            margin:
+                const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 6,
             ),
             child: ListTile(
-              leading: const Icon(Icons.groups),
+              leading:
+                  const Icon(Icons.groups),
               title: Text(team.name),
               subtitle: Text(
-                '${team.division} • ${team.coach}',
+                '${team.division} • ${team.coachName}',
               ),
               onTap: () {
                 Navigator.pop<Team>(

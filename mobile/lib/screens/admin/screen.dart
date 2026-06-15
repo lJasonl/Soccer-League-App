@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../coach/coachscreen.dart';
+import '../referee/screen.dart';
+import '../users/screen.dart';
 import 'registration_fee_screen.dart';
 import 'season_management_screen.dart';
 
@@ -52,17 +55,41 @@ class Screen extends StatelessWidget {
           _AdminTile(
             icon: Icons.sports_soccer,
             title: 'Coach Management',
-            onTap: null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const CoachScreen(),
+                ),
+              );
+            },
           ),
           _AdminTile(
             icon: Icons.gavel,
             title: 'Referee Management',
-            onTap: null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const RefereeScreen(),
+                ),
+              );
+            },
           ),
           _AdminTile(
             icon: Icons.people,
             title: 'User Roles',
-            onTap: null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const UserScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),

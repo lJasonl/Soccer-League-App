@@ -16,31 +16,44 @@ class TeamDetailsScreen extends StatefulWidget {
   });
 
   @override
-  State<TeamDetailsScreen> createState() => _TeamDetailsScreenState();
+  State<TeamDetailsScreen> createState() =>
+      _TeamDetailsScreenState();
 }
 
-class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
+class _TeamDetailsScreenState
+    extends State<TeamDetailsScreen> {
   Future<void> _deleteTeam() async {
-    final confirmed = await showDialog<bool>(
+    final confirmed =
+        await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Team'),
+          title: const Text(
+            'Delete Team',
+          ),
           content: Text(
             'Delete ${widget.team.name}?',
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context, false);
+                Navigator.pop(
+                  context,
+                  false,
+                );
               },
-              child: const Text('Cancel'),
+              child:
+                  const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context, true);
+                Navigator.pop(
+                  context,
+                  true,
+                );
               },
-              child: const Text('Delete'),
+              child:
+                  const Text('Delete'),
             ),
           ],
         );
@@ -67,15 +80,19 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.team.name),
+        title: Text(
+          widget.team.name,
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon:
+                const Icon(Icons.edit),
             onPressed: () async {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => EditTeamScreen(
+                  builder: (_) =>
+                      EditTeamScreen(
                     team: widget.team,
                   ),
                 ),
@@ -85,85 +102,114 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _deleteTeam,
+            icon:
+                const Icon(Icons.delete),
+            onPressed:
+                _deleteTeam,
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:
+          FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => AddPlayerScreen(
-                teamId: widget.team.id,
+              builder: (_) =>
+                  AddPlayerScreen(
+                teamId:
+                    widget.team.id,
               ),
             ),
           );
 
           setState(() {});
         },
-        child: const Icon(Icons.add),
+        child:
+            const Icon(Icons.add),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(
+          16,
+        ),
         child: ListView(
           children: [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding:
+                    const EdgeInsets
+                        .all(16),
                 child: Column(
                   crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      CrossAxisAlignment
+                          .start,
                   children: [
                     Text(
                       widget.team.name,
-                      style: const TextStyle(
+                      style:
+                          const TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                            FontWeight
+                                .bold,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                       'Division: ${widget.team.division}',
                     ),
                     Text(
-                      'Coach: ${widget.team.coach}',
+                      'Coach: ${widget.team.coachName}',
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
             const Text(
               'Players',
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight:
+                    FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(
+              height: 8,
+            ),
             ...teamPlayers.map(
               (player) => Card(
                 child: ListTile(
-                  leading: CircleAvatar(
+                  leading:
+                      CircleAvatar(
                     child: Text(
-                      player.jerseyNumber.toString(),
+                      player
+                          .jerseyNumber
+                          .toString(),
                     ),
                   ),
                   title: Text(
                     player.fullName,
                   ),
-                  trailing: const Icon(
-                    Icons.chevron_right,
+                  trailing:
+                      const Icon(
+                    Icons
+                        .chevron_right,
                   ),
                   onTap: () async {
-                    await Navigator.push(
+                    await Navigator
+                        .push(
                       context,
                       MaterialPageRoute(
                         builder: (_) =>
                             PlayerDetailsScreen(
-                          player: player,
+                          player:
+                              player,
                         ),
                       ),
                     );

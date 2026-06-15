@@ -3,7 +3,9 @@ import '../data/sample_teams.dart';
 import 'storage_service.dart';
 
 class TeamDataService {
-  static List<Team> teams = List.from(sampleTeams);
+  static List<Team> teams = List.from(
+    sampleTeams,
+  );
 
   static Future<void> loadTeams() async {
     final box = StorageService.getTeamsBox();
@@ -16,13 +18,20 @@ class TeamDataService {
     }
 
     teams = box.values.map((item) {
-      final data = Map<String, dynamic>.from(item);
+      final data = Map<String, dynamic>.from(
+        item,
+      );
 
       return Team(
-        id: data['id'],
-        name: data['name'],
-        division: data['division'],
-        coach: data['coach'],
+        id: data['id'] ?? '',
+        name: data['name'] ?? '',
+        division: data['division'] ?? '',
+        coachId:
+            data['coachId'] ?? '',
+        coachName:
+            data['coachName'] ??
+            data['coach'] ??
+            '',
       );
     }).toList();
 
@@ -41,7 +50,8 @@ class TeamDataService {
         'id': team.id,
         'name': team.name,
         'division': team.division,
-        'coach': team.coach,
+        'coachId': team.coachId,
+        'coachName': team.coachName,
       });
     }
 
@@ -62,7 +72,9 @@ class TeamDataService {
     Team updatedTeam,
   ) async {
     final index = teams.indexWhere(
-      (team) => team.id == updatedTeam.id,
+      (team) =>
+          team.id ==
+          updatedTeam.id,
     );
 
     if (index != -1) {
@@ -80,5 +92,29 @@ class TeamDataService {
     );
 
     await saveTeams();
+  }
+
+  static Team? getTeamByCoachId(
+    String coachId,
+  ) {
+    try {
+      return teams.firstWhere(
+        (team) =>
+            team.coachId ==
+            coachId,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static bool isCoachAssigned(
+    String coachId,
+  ) {
+    return teams.any(
+      (team) =>
+          team.coachId ==
+          coachId,
+    );
   }
 }

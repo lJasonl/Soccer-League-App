@@ -6,6 +6,9 @@ class Game {
   final String gameTime;
   final String field;
 
+  final String refereeId;
+  final String refereeName;
+
   final int homeScore;
   final int awayScore;
 
@@ -16,6 +19,8 @@ class Game {
     required this.gameDate,
     required this.gameTime,
     required this.field,
+    required this.refereeId,
+    required this.refereeName,
     required this.homeScore,
     required this.awayScore,
   });

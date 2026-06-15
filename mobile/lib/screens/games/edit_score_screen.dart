@@ -30,12 +30,14 @@ class _EditScoreScreenState
 
     _homeScoreController =
         TextEditingController(
-      text: widget.game.homeScore.toString(),
+      text: widget.game.homeScore
+          .toString(),
     );
 
     _awayScoreController =
         TextEditingController(
-      text: widget.game.awayScore.toString(),
+      text: widget.game.awayScore
+          .toString(),
     );
   }
 
@@ -49,11 +51,21 @@ class _EditScoreScreenState
   Future<void> _saveScore() async {
     final updatedGame = Game(
       id: widget.game.id,
-      homeTeam: widget.game.homeTeam,
-      awayTeam: widget.game.awayTeam,
-      gameDate: widget.game.gameDate,
-      gameTime: widget.game.gameTime,
+      homeTeam:
+          widget.game.homeTeam,
+      awayTeam:
+          widget.game.awayTeam,
+      gameDate:
+          widget.game.gameDate,
+      gameTime:
+          widget.game.gameTime,
       field: widget.game.field,
+
+      refereeId:
+          widget.game.refereeId,
+      refereeName:
+          widget.game.refereeName,
+
       homeScore:
           int.tryParse(
             _homeScoreController.text,
@@ -79,22 +91,28 @@ class _EditScoreScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Enter Score'),
+        title: const Text(
+          'Enter Score',
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
         child: Column(
           children: [
             Text(
               '${widget.game.homeTeam} vs ${widget.game.awayTeam}',
-              style: const TextStyle(
+              style:
+                  const TextStyle(
                 fontSize: 20,
                 fontWeight:
                     FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
 
             TextField(
               controller:
@@ -103,13 +121,16 @@ class _EditScoreScreenState
                   TextInputType.number,
               decoration:
                   const InputDecoration(
-                labelText: 'Home Score',
+                labelText:
+                    'Home Score',
                 border:
                     OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
               controller:
@@ -118,18 +139,23 @@ class _EditScoreScreenState
                   TextInputType.number,
               decoration:
                   const InputDecoration(
-                labelText: 'Away Score',
+                labelText:
+                    'Away Score',
                 border:
                     OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
 
             SizedBox(
-              width: double.infinity,
+              width:
+                  double.infinity,
               child: ElevatedButton(
-                onPressed: _saveScore,
+                onPressed:
+                    _saveScore,
                 child: const Text(
                   'Save Score',
                 ),

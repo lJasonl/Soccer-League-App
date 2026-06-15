@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../models/game.dart';
+import '../../models/referee.dart';
 import '../../services/game_data_service.dart';
+import '../../services/referee_data_service.dart';
 
 class EditGameScreen extends StatefulWidget {
   final Game game;
@@ -33,6 +35,9 @@ class _EditGameScreenState
   late final TextEditingController
       _fieldController;
 
+  late String _refereeId;
+  late String _refereeName;
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +66,12 @@ class _EditGameScreenState
         TextEditingController(
       text: widget.game.field,
     );
+
+    _refereeId =
+        widget.game.refereeId;
+
+    _refereeName =
+        widget.game.refereeName;
   }
 
   @override
@@ -76,13 +87,24 @@ class _EditGameScreenState
   Future<void> _saveGame() async {
     final updatedGame = Game(
       id: widget.game.id,
-      homeTeam: _homeTeamController.text,
-      awayTeam: _awayTeamController.text,
-      gameDate: _dateController.text,
-      gameTime: _timeController.text,
-      field: _fieldController.text,
-      homeScore: widget.game.homeScore,
-      awayScore: widget.game.awayScore,
+      homeTeam:
+          _homeTeamController.text,
+      awayTeam:
+          _awayTeamController.text,
+      gameDate:
+          _dateController.text,
+      gameTime:
+          _timeController.text,
+      field:
+          _fieldController.text,
+
+      refereeId: _refereeId,
+      refereeName: _refereeName,
+
+      homeScore:
+          widget.game.homeScore,
+      awayScore:
+          widget.game.awayScore,
     );
 
     await GameDataService.updateGame(
@@ -96,12 +118,18 @@ class _EditGameScreenState
 
   @override
   Widget build(BuildContext context) {
+    final List<Referee> referees =
+        RefereeDataService.referees;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Game'),
+        title: const Text(
+          'Edit Game',
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(
@@ -109,68 +137,138 @@ class _EditGameScreenState
                   _homeTeamController,
               decoration:
                   const InputDecoration(
-                labelText: 'Home Team',
+                labelText:
+                    'Home Team',
                 border:
                     OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
               controller:
                   _awayTeamController,
               decoration:
                   const InputDecoration(
-                labelText: 'Away Team',
+                labelText:
+                    'Away Team',
                 border:
                     OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _dateController,
+              controller:
+                  _dateController,
               decoration:
                   const InputDecoration(
-                labelText: 'Game Date',
+                labelText:
+                    'Game Date',
                 border:
                     OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _timeController,
+              controller:
+                  _timeController,
               decoration:
                   const InputDecoration(
-                labelText: 'Game Time',
+                labelText:
+                    'Game Time',
                 border:
                     OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
               controller:
                   _fieldController,
               decoration:
                   const InputDecoration(
-                labelText: 'Field',
+                labelText:
+                    'Field',
                 border:
                     OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 16,
+            ),
+
+            DropdownButtonFormField<
+                String>(
+              value: _refereeId.isEmpty
+                  ? null
+                  : _refereeId,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Assigned Referee',
+                border:
+                    OutlineInputBorder(),
+              ),
+              items: referees
+                  .map(
+                    (referee) =>
+                        DropdownMenuItem(
+                      value:
+                          referee.id,
+                      child: Text(
+                        referee
+                            .fullName,
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                if (value == null) {
+                  return;
+                }
+
+                final referee =
+                    referees
+                        .firstWhere(
+                  (r) =>
+                      r.id == value,
+                );
+
+                setState(() {
+                  _refereeId =
+                      referee.id;
+                  _refereeName =
+                      referee
+                          .fullName;
+                });
+              },
+            ),
+
+            const SizedBox(
+              height: 24,
+            ),
 
             SizedBox(
-              width: double.infinity,
+              width:
+                  double.infinity,
               child: ElevatedButton(
-                onPressed: _saveGame,
+                onPressed:
+                    _saveGame,
                 child: const Text(
                   'Save Changes',
                 ),

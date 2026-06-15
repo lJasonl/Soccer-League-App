@@ -81,8 +81,16 @@ class _EditGameScreenState
       gameDate: _dateController.text,
       gameTime: _timeController.text,
       field: _fieldController.text,
-      homeScore: widget.game.homeScore,
-      awayScore: widget.game.awayScore,
+
+      refereeId:
+          widget.game.refereeId,
+      refereeName:
+          widget.game.refereeName,
+
+      homeScore:
+          widget.game.homeScore,
+      awayScore:
+          widget.game.awayScore,
     );
 
     GameDataService.updateGame(
@@ -96,66 +104,91 @@ class _EditGameScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Game'),
+        title: const Text(
+          'Edit Game',
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
         child: ListView(
           children: [
             TextField(
-              controller: _homeTeamController,
+              controller:
+                  _homeTeamController,
               decoration:
                   const InputDecoration(
-                labelText: 'Home Team',
+                labelText:
+                    'Home Team',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _awayTeamController,
+              controller:
+                  _awayTeamController,
               decoration:
                   const InputDecoration(
-                labelText: 'Away Team',
+                labelText:
+                    'Away Team',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _dateController,
+              controller:
+                  _dateController,
               decoration:
                   const InputDecoration(
-                labelText: 'Game Date',
+                labelText:
+                    'Game Date',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _timeController,
+              controller:
+                  _timeController,
               decoration:
                   const InputDecoration(
-                labelText: 'Game Time',
+                labelText:
+                    'Game Time',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _fieldController,
+              controller:
+                  _fieldController,
               decoration:
                   const InputDecoration(
-                labelText: 'Field',
+                labelText:
+                    'Field',
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
 
             ElevatedButton(
-              onPressed: _saveChanges,
-              child:
-                  const Text('Save Changes'),
+              onPressed:
+                  _saveChanges,
+              child: const Text(
+                'Save Changes',
+              ),
             ),
           ],
         ),

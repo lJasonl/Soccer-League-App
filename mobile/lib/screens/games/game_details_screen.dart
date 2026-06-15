@@ -33,22 +33,34 @@ class _GameDetailsScreenState
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Game'),
+          title: const Text(
+            'Delete Game',
+          ),
           content: Text(
             'Delete ${game.homeTeam} vs ${game.awayTeam}?',
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context, false);
+                Navigator.pop(
+                  context,
+                  false,
+                );
               },
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+              ),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context, true);
+                Navigator.pop(
+                  context,
+                  true,
+                );
               },
-              child: const Text('Delete'),
+              child: const Text(
+                'Delete',
+              ),
             ),
           ],
         );
@@ -62,7 +74,10 @@ class _GameDetailsScreenState
 
       if (!mounted) return;
 
-      Navigator.pop(context, true);
+      Navigator.pop(
+        context,
+        true,
+      );
     }
   }
 
@@ -70,7 +85,8 @@ class _GameDetailsScreenState
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => EditGameScreen(
+        builder: (_) =>
+            EditGameScreen(
           game: game,
         ),
       ),
@@ -91,7 +107,8 @@ class _GameDetailsScreenState
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => EditScoreScreen(
+        builder: (_) =>
+            EditScoreScreen(
           game: game,
         ),
       ),
@@ -112,41 +129,57 @@ class _GameDetailsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Game Details'),
+        title: const Text(
+          'Game Details',
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.scoreboard),
+            icon: const Icon(
+              Icons.scoreboard,
+            ),
             onPressed: _editScore,
           ),
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: const Icon(
+              Icons.edit,
+            ),
             onPressed: _editGame,
           ),
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(
+              Icons.delete,
+            ),
             onPressed: _deleteGame,
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding:
+                const EdgeInsets.all(
+              16,
+            ),
             child: Column(
               crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  CrossAxisAlignment
+                      .start,
               children: [
                 Text(
                   '${game.homeTeam} vs ${game.awayTeam}',
-                  style: const TextStyle(
+                  style:
+                      const TextStyle(
                     fontSize: 24,
                     fontWeight:
                         FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(
+                  height: 16,
+                ),
 
                 Text(
                   'Date: ${game.gameDate}',
@@ -160,7 +193,25 @@ class _GameDetailsScreenState
                   'Field: ${game.field}',
                 ),
 
-                const SizedBox(height: 24),
+                // Admin-only area
+                if (game.refereeName
+                    .isNotEmpty) ...[
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Assigned Referee: ${game.refereeName}',
+                    style:
+                        const TextStyle(
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+                ],
+
+                const SizedBox(
+                  height: 24,
+                ),
 
                 const Text(
                   'Final Score',
@@ -171,11 +222,14 @@ class _GameDetailsScreenState
                   ),
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(
+                  height: 8,
+                ),
 
                 Text(
                   '${game.homeScore} - ${game.awayScore}',
-                  style: const TextStyle(
+                  style:
+                      const TextStyle(
                     fontSize: 32,
                     fontWeight:
                         FontWeight.bold,

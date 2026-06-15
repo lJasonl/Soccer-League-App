@@ -12,6 +12,12 @@ class StorageService {
       'settings';
   static const String seasonsBox =
       'seasons';
+  static const String coachesBox =
+      'coaches';
+  static const String refereesBox =
+      'referees';
+  static const String usersBox =
+      'users';
 
   static Future<void> initialize() async {
     await Hive.openBox(teamsBox);
@@ -21,6 +27,9 @@ class StorageService {
     await Hive.openBox(paymentsBox);
     await Hive.openBox(settingsBox);
     await Hive.openBox(seasonsBox);
+    await Hive.openBox(coachesBox);
+    await Hive.openBox(refereesBox);
+    await Hive.openBox(usersBox);
   }
 
   static Box getTeamsBox() {
@@ -49,5 +58,17 @@ class StorageService {
 
   static Box getSeasonsBox() {
     return Hive.box(seasonsBox);
+  }
+
+  static Box getCoachesBox() {
+    return Hive.box(coachesBox);
+  }
+
+  static Box getRefereesBox() {
+    return Hive.box(refereesBox);
+  }
+
+  static Box getUsersBox() {
+    return Hive.box(usersBox);
   }
 }

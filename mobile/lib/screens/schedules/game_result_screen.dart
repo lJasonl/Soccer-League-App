@@ -30,12 +30,14 @@ class _GameResultScreenState
 
     _homeScoreController =
         TextEditingController(
-      text: widget.game.homeScore.toString(),
+      text: widget.game.homeScore
+          .toString(),
     );
 
     _awayScoreController =
         TextEditingController(
-      text: widget.game.awayScore.toString(),
+      text: widget.game.awayScore
+          .toString(),
     );
   }
 
@@ -49,11 +51,21 @@ class _GameResultScreenState
   void _saveResult() {
     final updatedGame = Game(
       id: widget.game.id,
-      homeTeam: widget.game.homeTeam,
-      awayTeam: widget.game.awayTeam,
-      gameDate: widget.game.gameDate,
-      gameTime: widget.game.gameTime,
+      homeTeam:
+          widget.game.homeTeam,
+      awayTeam:
+          widget.game.awayTeam,
+      gameDate:
+          widget.game.gameDate,
+      gameTime:
+          widget.game.gameTime,
       field: widget.game.field,
+
+      refereeId:
+          widget.game.refereeId,
+      refereeName:
+          widget.game.refereeName,
+
       homeScore:
           int.tryParse(
             _homeScoreController.text,
@@ -77,24 +89,32 @@ class _GameResultScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Game Result'),
+        title: const Text(
+          'Game Result',
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(16),
         child: Column(
           children: [
             Text(
               '${widget.game.homeTeam} vs ${widget.game.awayTeam}',
-              style: const TextStyle(
+              style:
+                  const TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight:
+                    FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
 
             TextField(
-              controller: _homeScoreController,
+              controller:
+                  _homeScoreController,
               keyboardType:
                   TextInputType.number,
               decoration:
@@ -104,10 +124,13 @@ class _GameResultScreenState
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _awayScoreController,
+              controller:
+                  _awayScoreController,
               keyboardType:
                   TextInputType.number,
               decoration:
@@ -117,14 +140,19 @@ class _GameResultScreenState
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
 
             SizedBox(
-              width: double.infinity,
+              width:
+                  double.infinity,
               child: ElevatedButton(
-                onPressed: _saveResult,
-                child:
-                    const Text('Save Result'),
+                onPressed:
+                    _saveResult,
+                child: const Text(
+                  'Save Result',
+                ),
               ),
             ),
           ],

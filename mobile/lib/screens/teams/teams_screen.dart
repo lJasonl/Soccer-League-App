@@ -8,53 +8,73 @@ class TeamsScreen extends StatefulWidget {
   const TeamsScreen({super.key});
 
   @override
-  State<TeamsScreen> createState() => _TeamsScreenState();
+  State<TeamsScreen> createState() =>
+      _TeamsScreenState();
 }
 
-class _TeamsScreenState extends State<TeamsScreen> {
+class _TeamsScreenState
+    extends State<TeamsScreen> {
   @override
   Widget build(BuildContext context) {
-    final teams = TeamDataService.teams;
+    final teams =
+        TeamDataService.teams;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Teams'),
+        title: const Text(
+          'Teams',
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:
+          FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const AddTeamScreen(),
+              builder: (_) =>
+                  const AddTeamScreen(),
             ),
           );
 
           setState(() {});
         },
-        child: const Icon(Icons.add),
+        child:
+            const Icon(Icons.add),
       ),
       body: ListView.builder(
         itemCount: teams.length,
-        itemBuilder: (context, index) {
-          final team = teams[index];
+        itemBuilder:
+            (context, index) {
+          final team =
+              teams[index];
 
           return Card(
-            margin: const EdgeInsets.symmetric(
+            margin:
+                const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 6,
             ),
             child: ListTile(
-              leading: const Icon(Icons.groups),
-              title: Text(team.name),
-              subtitle: Text(
-                '${team.division} • ${team.coach}',
+              leading:
+                  const Icon(
+                Icons.groups,
               ),
-              trailing: const Icon(Icons.chevron_right),
+              title: Text(
+                team.name,
+              ),
+              subtitle: Text(
+                '${team.division} • ${team.coachName}',
+              ),
+              trailing:
+                  const Icon(
+                Icons.chevron_right,
+              ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => TeamDetailsScreen(
+                    builder: (_) =>
+                        TeamDetailsScreen(
                       team: team,
                     ),
                   ),
