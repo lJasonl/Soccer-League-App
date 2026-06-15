@@ -24,6 +24,9 @@ class TeamDetailsScreen extends StatefulWidget {
 
 class _TeamDetailsScreenState
     extends State<TeamDetailsScreen> {
+  static const Color dcsaNavy =
+      Color(0xFF0B2A5B);
+
   Future<void> _deleteTeam() async {
     final confirmed =
         await showDialog<bool>(
@@ -85,7 +88,7 @@ class _TeamDetailsScreenState
             'Remove Player',
           ),
           content: Text(
-            'Remove ${player.fullName} from the roster?',
+            'Remove ${player.fullName} from roster?',
           ),
           actions: [
             TextButton(
@@ -207,7 +210,7 @@ class _TeamDetailsScreenState
         ],
       ),
       floatingActionButton:
-          FloatingActionButton(
+          FloatingActionButton.extended(
         onPressed: () async {
           await Navigator.push(
             context,
@@ -222,181 +225,310 @@ class _TeamDetailsScreenState
 
           setState(() {});
         },
-        child:
-            const Icon(Icons.add),
-      ),
-      body: Padding(
-        padding:
-            const EdgeInsets.all(
-          16,
+        icon: const Icon(Icons.person_add),
+        label: const Text(
+          'Add Player',
         ),
-        child: ListView(
-          children: [
-            Card(
+      ),
+      body: ListView(
+        padding:
+            const EdgeInsets.all(16),
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.all(
+              20,
+            ),
+            decoration: BoxDecoration(
+              color: dcsaNavy,
+              borderRadius:
+                  BorderRadius.circular(
+                24,
+              ),
+            ),
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 36,
+                  backgroundColor:
+                      Colors.white,
+                  child: Icon(
+                    Icons.groups,
+                    size: 40,
+                    color: dcsaNavy,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  widget.team.name,
+                  textAlign:
+                      TextAlign.center,
+                  style:
+                      const TextStyle(
+                    color:
+                        Colors.white,
+                    fontSize: 26,
+                    fontWeight:
+                        FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  widget.team.division,
+                  style:
+                      const TextStyle(
+                    color:
+                        Colors.white70,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration:
+                      BoxDecoration(
+                    color:
+                        Colors.white24,
+                    borderRadius:
+                        BorderRadius.circular(
+                      20,
+                    ),
+                  ),
+                  child: Text(
+                    'Coach: ${widget.team.coachName}',
+                    style:
+                        const TextStyle(
+                      color:
+                          Colors.white,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          Row(
+            children: [
+              Expanded(
+                child: _summaryCard(
+                  'Players',
+                  teamPlayers.length
+                      .toString(),
+                  Icons.people,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _summaryCard(
+                  'Registered',
+                  registeredCount
+                      .toString(),
+                  Icons.check_circle,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          Row(
+            children: [
+              Expanded(
+                child: _summaryCard(
+                  'Pending',
+                  pendingCount
+                      .toString(),
+                  Icons.schedule,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _summaryCard(
+                  'Unpaid',
+                  unpaidCount
+                      .toString(),
+                  Icons.warning,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          Text(
+            'Team Roster (${teamPlayers.length})',
+            style:
+                const TextStyle(
+              fontSize: 22,
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
+          if (teamPlayers.isEmpty)
+            const Card(
               child: Padding(
                 padding:
-                    const EdgeInsets
-                        .all(16),
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
-                  children: [
-                    Text(
-                      widget.team.name,
-                      style:
-                          const TextStyle(
-                        fontSize: 24,
-                        fontWeight:
-                            FontWeight
-                                .bold,
+                    EdgeInsets.all(
+                  24,
+                ),
+                child: Center(
+                  child: Text(
+                    'No players on roster.',
+                  ),
+                ),
+              ),
+            ),
+
+          ...teamPlayers.map(
+            (player) => Card(
+              elevation: 2,
+              child: ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                leading:
+                    CircleAvatar(
+                  backgroundColor:
+                      dcsaNavy,
+                  child: Text(
+                    player
+                        .jerseyNumber
+                        .toString(),
+                    style:
+                        const TextStyle(
+                      color:
+                          Colors.white,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  player.fullName,
+                ),
+                subtitle: Padding(
+                  padding:
+                      const EdgeInsets.only(
+                    top: 4,
+                  ),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration:
+                        BoxDecoration(
+                      color:
+                          _statusColor(
+                        player
+                            .registrationStatus,
+                      ),
+                      borderRadius:
+                          BorderRadius.circular(
+                        12,
                       ),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'Division: ${widget.team.division}',
-                    ),
-                    Text(
-                      'Coach: ${widget.team.coachName}',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Card(
-              child: Padding(
-                padding:
-                    const EdgeInsets
-                        .all(16),
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
-                  children: [
-                    Text(
-                      'Roster Summary',
+                    child: Text(
+                      player
+                          .registrationStatus,
                       style:
-                          Theme.of(
-                        context,
-                      )
-                              .textTheme
-                              .titleMedium,
+                          const TextStyle(
+                        color:
+                            Colors.white,
+                        fontSize: 12,
+                        fontWeight:
+                            FontWeight.bold,
+                      ),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'Players: ${teamPlayers.length}',
-                    ),
-                    Text(
-                      'Registered: $registeredCount',
-                    ),
-                    Text(
-                      'Pending: $pendingCount',
-                    ),
-                    Text(
-                      'Unpaid: $unpaidCount',
-                    ),
-                  ],
+                  ),
                 ),
+                trailing:
+                    IconButton(
+                  icon:
+                      const Icon(
+                    Icons.delete,
+                  ),
+                  onPressed: () {
+                    _deletePlayer(
+                      player,
+                    );
+                  },
+                ),
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          PlayerDetailsScreen(
+                        player:
+                            player,
+                      ),
+                    ),
+                  );
+
+                  setState(() {});
+                },
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _summaryCard(
+    String title,
+    String value,
+    IconData icon,
+  ) {
+    return Card(
+      child: Padding(
+        padding:
+            const EdgeInsets.all(
+          12,
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: dcsaNavy,
+            ),
             const SizedBox(
-              height: 16,
+              height: 6,
             ),
             Text(
-              'Roster (${teamPlayers.length})',
+              value,
               style:
                   const TextStyle(
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight:
                     FontWeight.bold,
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            if (teamPlayers.isEmpty)
-              const Card(
-                child: Padding(
-                  padding:
-                      EdgeInsets.all(
-                    24,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'No players have been added to this team.',
-                    ),
-                  ),
-                ),
-              ),
-            ...teamPlayers.map(
-              (player) => Card(
-                child: ListTile(
-                  leading:
-                      CircleAvatar(
-                    child: Text(
-                      player
-                          .jerseyNumber
-                          .toString(),
-                    ),
-                  ),
-                  title: Text(
-                    player.fullName,
-                  ),
-                  subtitle: Text(
-                    player
-                        .registrationStatus,
-                  ),
-                  trailing: Row(
-                    mainAxisSize:
-                        MainAxisSize.min,
-                    children: [
-                      Chip(
-                        label: Text(
-                          player
-                              .registrationStatus,
-                        ),
-                        backgroundColor:
-                            _statusColor(
-                          player
-                              .registrationStatus,
-                        ),
-                      ),
-                      IconButton(
-                        icon:
-                            const Icon(
-                          Icons.delete,
-                        ),
-                        onPressed: () {
-                          _deletePlayer(
-                            player,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  onTap: () async {
-                    await Navigator
-                        .push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            PlayerDetailsScreen(
-                          player:
-                              player,
-                        ),
-                      ),
-                    );
-
-                    setState(() {});
-                  },
-                ),
+            Text(
+              title,
+              style:
+                  const TextStyle(
+                fontSize: 12,
               ),
             ),
           ],

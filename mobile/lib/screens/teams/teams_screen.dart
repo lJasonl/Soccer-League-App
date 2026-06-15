@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../services/league_data_service.dart';
 import '../../services/team_data_service.dart';
 import 'add_team_screen.dart';
 import 'team_details_screen.dart';
@@ -14,6 +15,9 @@ class TeamsScreen extends StatefulWidget {
 
 class _TeamsScreenState
     extends State<TeamsScreen> {
+  static const Color dcsaNavy =
+      Color(0xFF0B2A5B);
+
   @override
   Widget build(BuildContext context) {
     final teams =
@@ -26,7 +30,7 @@ class _TeamsScreenState
         ),
       ),
       floatingActionButton:
-          FloatingActionButton(
+          FloatingActionButton.extended(
         onPressed: () async {
           await Navigator.push(
             context,
@@ -38,52 +42,214 @@ class _TeamsScreenState
 
           setState(() {});
         },
-        child:
-            const Icon(Icons.add),
+        icon: const Icon(
+          Icons.add,
+        ),
+        label: const Text(
+          'Add Team',
+        ),
       ),
-      body: ListView.builder(
-        itemCount: teams.length,
-        itemBuilder:
-            (context, index) {
-          final team =
-              teams[index];
+      body: teams.isEmpty
+          ? const Center(
+              child: Text(
+                'No teams have been created.',
+              ),
+            )
+          : ListView.builder(
+              padding:
+                  const EdgeInsets.all(
+                16,
+              ),
+              itemCount:
+                  teams.length,
+              itemBuilder:
+                  (context, index) {
+                final team =
+                    teams[index];
 
-          return Card(
-            margin:
-                const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
-            ),
-            child: ListTile(
-              leading:
-                  const Icon(
-                Icons.groups,
-              ),
-              title: Text(
-                team.name,
-              ),
-              subtitle: Text(
-                '${team.division} • ${team.coachName}',
-              ),
-              trailing:
-                  const Icon(
-                Icons.chevron_right,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        TeamDetailsScreen(
-                      team: team,
+                final playerCount =
+                    LeagueDataService
+                        .getPlayersForTeam(
+                  team.id,
+                ).length;
+
+                return Card(
+                  elevation: 3,
+                  margin:
+                      const EdgeInsets.only(
+                    bottom: 12,
+                  ),
+                  child: InkWell(
+                    borderRadius:
+                        BorderRadius.circular(
+                      12,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              TeamDetailsScreen(
+                            team: team,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.all(
+                        16,
+                      ),
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment
+                                .start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets
+                                        .all(
+                                  10,
+                                ),
+                                decoration:
+                                    BoxDecoration(
+                                  color:
+                                      dcsaNavy,
+                                  borderRadius:
+                                      BorderRadius.circular(
+                                    10,
+                                  ),
+                                ),
+                                child:
+                                    const Icon(
+                                  Icons.groups,
+                                  color: Colors
+                                      .white,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  team.name,
+                                  style:
+                                      const TextStyle(
+                                    fontSize:
+                                        20,
+                                    fontWeight:
+                                        FontWeight
+                                            .bold,
+                                  ),
+                                ),
+                              ),
+                              const Icon(
+                                Icons
+                                    .chevron_right,
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(
+                            height: 12,
+                          ),
+
+                          const Divider(),
+
+                          const SizedBox(
+                            height: 8,
+                          ),
+
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons
+                                    .emoji_events,
+                                size: 18,
+                                color:
+                                    dcsaNavy,
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Text(
+                                team.division,
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(
+                            height: 6,
+                          ),
+
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons
+                                    .sports,
+                                size: 18,
+                                color:
+                                    dcsaNavy,
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  team.coachName
+                                          .isEmpty
+                                      ? 'No Coach Assigned'
+                                      : team
+                                          .coachName,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(
+                            height: 12,
+                          ),
+
+                          Container(
+                            padding:
+                                const EdgeInsets.symmetric(
+                              horizontal:
+                                  10,
+                              vertical:
+                                  6,
+                            ),
+                            decoration:
+                                BoxDecoration(
+                              color: dcsaNavy
+                                  .withOpacity(
+                                0.08,
+                              ),
+                              borderRadius:
+                                  BorderRadius.circular(
+                                20,
+                              ),
+                            ),
+                            child: Text(
+                              '$playerCount Players',
+                              style:
+                                  const TextStyle(
+                                fontWeight:
+                                    FontWeight
+                                        .bold,
+                                color:
+                                    dcsaNavy,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
               },
             ),
-          );
-        },
-      ),
     );
   }
 }

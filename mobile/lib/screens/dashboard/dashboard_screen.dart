@@ -6,6 +6,9 @@ import '../../services/player_data_service.dart';
 import '../../services/referee_data_service.dart';
 import '../../services/season_data_service.dart';
 import '../../services/team_data_service.dart';
+import '../../services/registration_data_service.dart';
+import '../../services/scholarship_data_service.dart';
+import '../../services/volunteer_data_service.dart';
 
 import '../admin/screen.dart' as admin;
 import '../games/games_screen.dart';
@@ -15,6 +18,7 @@ import '../registrations/screen.dart';
 import '../schedules/schedules_screen.dart';
 import '../standings/standings_screen.dart';
 import '../teams/teams_screen.dart';
+import '../scholarships/scholarship_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({
@@ -28,13 +32,17 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState
     extends State<DashboardScreen> {
+  static const Color dcsaNavy =
+      Color(0xFF0B2A5B);
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final activeSeason =
         SeasonDataService.seasons
             .where(
-              (season) =>
-                  season.isActive,
+              (s) => s.isActive,
             )
             .toList();
 
@@ -44,7 +52,18 @@ class _DashboardScreenState
             : 'No Active Season';
 
     final upcomingGames =
-        GameDataService.games.take(3).toList();
+        GameDataService.games
+            .take(3)
+            .toList();
+
+    final volunteerHours =
+        VolunteerDataService.entries
+            .fold<double>(
+      0,
+      (sum, entry) =>
+          sum +
+          entry.hoursWorked,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -54,49 +73,33 @@ class _DashboardScreenState
       ),
       body: SingleChildScrollView(
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(
+          16,
+        ),
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start,
           children: [
-            Card(
-              child: Padding(
-                padding:
-                    const EdgeInsets.all(
-                  16,
-                ),
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
-                  children: [
-                    const Text(
-                      'Current Season',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight:
-                            FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      seasonName,
-                      style:
-                          const TextStyle(
-                        fontSize: 24,
-                        fontWeight:
-                            FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+            _buildHeroBanner(
+              seasonName,
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            const Text(
+              'League Overview',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight:
+                    FontWeight.bold,
+                color: dcsaNavy,
               ),
             ),
 
             const SizedBox(
-              height: 16,
+              height: 10,
             ),
 
             Row(
@@ -111,7 +114,7 @@ class _DashboardScreenState
                   ),
                 ),
                 const SizedBox(
-                  width: 12,
+                  width: 10,
                 ),
                 Expanded(
                   child: _statCard(
@@ -126,7 +129,7 @@ class _DashboardScreenState
             ),
 
             const SizedBox(
-              height: 12,
+              height: 8,
             ),
 
             Row(
@@ -141,7 +144,7 @@ class _DashboardScreenState
                   ),
                 ),
                 const SizedBox(
-                  width: 12,
+                  width: 10,
                 ),
                 Expanded(
                   child: _statCard(
@@ -156,44 +159,215 @@ class _DashboardScreenState
             ),
 
             const SizedBox(
+              height: 8,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: _statCard(
+                    'Scholarships',
+                    ScholarshipDataService
+                        .activeFamilyCount
+                        .toString(),
+                    Icons
+                        .volunteer_activism,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: _statCard(
+                    'Volunteer Hrs',
+                    volunteerHours
+                        .toStringAsFixed(
+                      0,
+                    ),
+                    Icons.handshake,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+            const Text(
+              'League Activity',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight:
+                    FontWeight.bold,
+                color: dcsaNavy,
+              ),
+            ),
+
+            const SizedBox(
+              height: 10,
+            ),
+
+            Card(
+              elevation: 3,
+              child: Padding(
+                padding:
+                    const EdgeInsets.all(
+                  16,
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(
+                        Icons
+                            .app_registration,
+                      ),
+                      title: const Text(
+                        'Registrations',
+                      ),
+                      trailing: Text(
+                        RegistrationDataService
+                            .registrations
+                            .length
+                            .toString(),
+                        style:
+                            const TextStyle(
+                          fontWeight:
+                              FontWeight
+                                  .bold,
+                        ),
+                      ),
+                    ),
+
+                    const Divider(),
+
+                    ListTile(
+                      leading: const Icon(
+                        Icons
+                            .sports_soccer,
+                      ),
+                      title: const Text(
+                        'Games Scheduled',
+                      ),
+                      trailing: Text(
+                        GameDataService
+                            .games.length
+                            .toString(),
+                        style:
+                            const TextStyle(
+                          fontWeight:
+                              FontWeight
+                                  .bold,
+                        ),
+                      ),
+                    ),
+
+                    const Divider(),
+
+                    ListTile(
+                      leading: const Icon(
+                        Icons.people,
+                      ),
+                      title: const Text(
+                        'Scholarship Families',
+                      ),
+                      trailing: Text(
+                        ScholarshipDataService
+                            .activeFamilyCount
+                            .toString(),
+                        style:
+                            const TextStyle(
+                          fontWeight:
+                              FontWeight
+                                  .bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(
               height: 24,
             ),
 
             const Text(
               'Upcoming Games',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 24,
                 fontWeight:
                     FontWeight.bold,
+                color: dcsaNavy,
               ),
             ),
 
             const SizedBox(
-              height: 8,
+              height: 10,
             ),
 
             if (upcomingGames.isEmpty)
               const Card(
                 child: Padding(
                   padding:
-                      EdgeInsets.all(16),
+                      EdgeInsets.all(
+                    20,
+                  ),
                   child: Text(
                     'No scheduled games.',
                   ),
                 ),
-              ),
-
-            ...upcomingGames.map(
+              ),            ...upcomingGames.map(
               (game) => Card(
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.sports_soccer,
+                elevation: 3,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.all(
+                    20,
                   ),
-                  title: Text(
-                    '${game.homeTeam} vs ${game.awayTeam}',
-                  ),
-                  subtitle: Text(
-                    '${game.gameDate} • ${game.gameTime}\n${game.field}',
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+                    children: [
+                      Text(
+                        '${game.homeTeam} vs ${game.awayTeam}',
+                        style:
+                            const TextStyle(
+                          fontSize: 20,
+                          fontWeight:
+                              FontWeight.bold,
+                        ),
+                      ),
+                      const Divider(),
+                      Text(
+                        '📅 ${game.gameDate}',
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        '⏰ ${game.gameTime}',
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        '📍 ${game.field}',
+                      ),
+                      if (game
+                          .refereeName
+                          .isNotEmpty)
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(
+                            top: 4,
+                          ),
+                          child: Text(
+                            '⚖ Referee: ${game.refereeName}',
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -206,14 +380,15 @@ class _DashboardScreenState
             const Text(
               'League Menu',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 24,
                 fontWeight:
                     FontWeight.bold,
+                color: dcsaNavy,
               ),
             ),
 
             const SizedBox(
-              height: 12,
+              height: 10,
             ),
 
             GridView.count(
@@ -221,157 +396,157 @@ class _DashboardScreenState
               physics:
                   const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.15,
               children: [
-                _menuCard(
+                _menu(
                   context,
                   'Teams',
                   Icons.groups,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const TeamsScreen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const TeamsScreen(),
                 ),
-                _menuCard(
+                _menu(
                   context,
                   'Players',
                   Icons.person,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const PlayersScreen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const PlayersScreen(),
                 ),
-                _menuCard(
+                _menu(
                   context,
                   'Schedules',
                   Icons.calendar_month,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const SchedulesScreen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const SchedulesScreen(),
                 ),
-                _menuCard(
+                _menu(
                   context,
                   'Games',
                   Icons.sports_soccer,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const GamesScreen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const GamesScreen(),
                 ),
-                _menuCard(
+                _menu(
                   context,
                   'Standings',
                   Icons.emoji_events,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const StandingsScreen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const StandingsScreen(),
                 ),
-                _menuCard(
+                _menu(
                   context,
                   'Registrations',
                   Icons.app_registration,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const RegistrationsScreen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const RegistrationsScreen(),
                 ),
-                _menuCard(
+                _menu(
                   context,
                   'Payments',
                   Icons.payment,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const PaymentsScreen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const PaymentsScreen(),
                 ),
-                _menuCard(
+                _menu(
+                  context,
+                  'Scholarships',
+                  Icons.volunteer_activism,
+                  const ScholarshipScreen(),
+                ),
+                _menu(
                   context,
                   'Admin',
                   Icons.admin_panel_settings,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const admin.Screen(),
-                      ),
-                    );
-
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+                  const admin.Screen(),
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildHeroBanner(
+    String seasonName,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding:
+          const EdgeInsets.all(
+        20,
+      ),
+      decoration: BoxDecoration(
+        color: dcsaNavy,
+        borderRadius:
+            BorderRadius.circular(
+          24,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.all(
+              10,
+            ),
+            decoration:
+                const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              'assets/images/dcsa_logo.png',
+              height: 100,
+            ),
+          ),
+          const SizedBox(
+            width: 16,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment
+                      .start,
+              children: [
+                const Text(
+                  'Darke County\nSoccer Association',
+                  style: TextStyle(
+                    color:
+                        Colors.white,
+                    fontSize: 24,
+                    fontWeight:
+                        FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration:
+                      BoxDecoration(
+                    color:
+                        Colors.white24,
+                    borderRadius:
+                        BorderRadius.circular(
+                      20,
+                    ),
+                  ),
+                  child: Text(
+                    seasonName,
+                    style:
+                        const TextStyle(
+                      color:
+                          Colors.white,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -382,14 +557,23 @@ class _DashboardScreenState
     IconData icon,
   ) {
     return Card(
+      elevation: 2,
       child: Padding(
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(
+          12,
+        ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              size: 32,
+            CircleAvatar(
+              radius: 18,
+              backgroundColor:
+                  dcsaNavy,
+              child: Icon(
+                icon,
+                size: 18,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(
               height: 8,
@@ -398,44 +582,71 @@ class _DashboardScreenState
               value,
               style:
                   const TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight:
                     FontWeight.bold,
               ),
             ),
-            Text(title),
+            Text(
+              title,
+              style:
+                  const TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _menuCard(
+  Widget _menu(
     BuildContext context,
     String title,
     IconData icon,
-    VoidCallback? onTap,
+    Widget screen,
   ) {
     return InkWell(
-      onTap: onTap,
+      onTap: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => screen,
+          ),
+        );
+
+        if (mounted) {
+          setState(() {});
+        }
+      },
+      borderRadius:
+          BorderRadius.circular(
+        16,
+      ),
       child: Card(
         elevation: 3,
         child: Column(
           mainAxisAlignment:
               MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 50,
+            CircleAvatar(
+              radius: 22,
+              backgroundColor:
+                  dcsaNavy,
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(
-              height: 10,
+              height: 8,
             ),
             Text(
               title,
+              textAlign:
+                  TextAlign.center,
               style:
                   const TextStyle(
-                fontSize: 18,
                 fontWeight:
                     FontWeight.bold,
               ),

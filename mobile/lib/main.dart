@@ -3,7 +3,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'theme/app_theme.dart';
 import 'router/app_router.dart';
+
 import 'services/storage_service.dart';
+
 import 'services/team_data_service.dart';
 import 'services/game_data_service.dart';
 import 'services/player_data_service.dart';
@@ -14,6 +16,10 @@ import 'services/season_data_service.dart';
 import 'services/coach_data_service.dart';
 import 'services/referee_data_service.dart';
 import 'services/user_data_service.dart';
+
+import 'services/scholarship_data_service.dart';
+import 'services/volunteer_data_service.dart';
+import 'services/announcement_data_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,19 +39,34 @@ Future<void> main() async {
   await RefereeDataService.loadReferees();
   await UserDataService.loadUsers();
 
+  await ScholarshipDataService
+      .loadFamilies();
+
+  await VolunteerDataService
+      .loadEntries();
+
+  await AnnouncementDataService
+      .loadAnnouncements();
+
   runApp(
     const SoccerLeagueApp(),
   );
 }
 
-class SoccerLeagueApp extends StatelessWidget {
-  const SoccerLeagueApp({super.key});
+class SoccerLeagueApp
+    extends StatelessWidget {
+  const SoccerLeagueApp({
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return MaterialApp(
       title: 'Soccer League App',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner:
+          false,
       theme: AppTheme.lightTheme,
       initialRoute: '/',
       onGenerateRoute:
