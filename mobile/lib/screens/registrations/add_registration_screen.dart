@@ -63,6 +63,7 @@ class _AddRegistrationScreenState
     _medicalNotesController.dispose();
     _registrationNotesController.dispose();
     _divisionController.dispose();
+
     super.dispose();
   }
 
@@ -76,39 +77,65 @@ class _AddRegistrationScreenState
       return;
     }
 
-    final registration = Registration(
+    final birthYearText =
+        _birthYearController.text
+            .trim();
+
+    final birthYear =
+        int.tryParse(
+              birthYearText,
+            ) ??
+            0;
+
+    print(
+      'BirthYear Text: "$birthYearText"',
+    );
+
+    print(
+      'Parsed BirthYear: $birthYear',
+    );
+
+    final registration =
+        Registration(
       id: DateTime.now()
           .millisecondsSinceEpoch
           .toString(),
       firstName:
-          _firstNameController.text.trim(),
+          _firstNameController.text
+              .trim(),
       lastName:
-          _lastNameController.text.trim(),
-      birthYear:
-          int.tryParse(
-            _birthYearController.text,
-          ) ??
-          0,
+          _lastNameController.text
+              .trim(),
+      birthYear: birthYear,
       parentName:
-          _parentNameController.text.trim(),
+          _parentNameController.text
+              .trim(),
       parentPhone:
-          _parentPhoneController.text.trim(),
+          _parentPhoneController.text
+              .trim(),
       parentEmail:
-          _parentEmailController.text.trim(),
+          _parentEmailController.text
+              .trim(),
       emergencyContact:
-          _emergencyContactController.text
+          _emergencyContactController
+              .text
               .trim(),
       emergencyPhone:
-          _emergencyPhoneController.text
+          _emergencyPhoneController
+              .text
               .trim(),
       medicalNotes:
-          _medicalNotesController.text.trim(),
+          _medicalNotesController.text
+              .trim(),
       registrationNotes:
-          _registrationNotesController.text
+          _registrationNotesController
+              .text
               .trim(),
       division:
-          _divisionController.text.trim(),
-      status: Registration.pending,
+          _divisionController.text
+              .trim(),
+      status:
+          Registration.pending,
       registrationDate:
           DateTime.now()
               .toString()
@@ -123,18 +150,26 @@ class _AddRegistrationScreenState
 
     if (!mounted) return;
 
-    Navigator.pop(context);
+    Navigator.pop(
+      context,
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text('Add Registration'),
+        title: const Text(
+          'Add Registration',
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.all(
+          16,
+        ),
         child: ListView(
           children: [
             TextField(
@@ -142,55 +177,87 @@ class _AddRegistrationScreenState
                   _firstNameController,
               decoration:
                   const InputDecoration(
-                labelText: 'First Name',
+                labelText:
+                    'First Name',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _lastNameController,
               decoration:
                   const InputDecoration(
-                labelText: 'Last Name',
+                labelText:
+                    'Last Name',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _birthYearController,
+              keyboardType:
+                  TextInputType.number,
               decoration:
                   const InputDecoration(
-                labelText: 'Birth Year',
+                labelText:
+                    'Birth Year',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _parentNameController,
               decoration:
                   const InputDecoration(
-                labelText: 'Parent Name',
+                labelText:
+                    'Parent Name',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _parentPhoneController,
               decoration:
                   const InputDecoration(
-                labelText: 'Parent Phone',
+                labelText:
+                    'Parent Phone',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _parentEmailController,
               decoration:
                   const InputDecoration(
-                labelText: 'Parent Email',
+                labelText:
+                    'Parent Email',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _emergencyContactController,
@@ -200,7 +267,11 @@ class _AddRegistrationScreenState
                     'Emergency Contact',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _emergencyPhoneController,
@@ -210,16 +281,25 @@ class _AddRegistrationScreenState
                     'Emergency Phone',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _divisionController,
               decoration:
                   const InputDecoration(
-                labelText: 'Division',
+                labelText:
+                    'Division',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _medicalNotesController,
@@ -230,7 +310,11 @@ class _AddRegistrationScreenState
                     'Medical Notes',
               ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             TextField(
               controller:
                   _registrationNotesController,
@@ -241,12 +325,18 @@ class _AddRegistrationScreenState
                     'Registration Notes',
               ),
             ),
-            const SizedBox(height: 24),
+
+            const SizedBox(
+              height: 24,
+            ),
+
             ElevatedButton(
               onPressed:
                   _saveRegistration,
               child:
-                  const Text('Save'),
+                  const Text(
+                'Save',
+              ),
             ),
           ],
         ),

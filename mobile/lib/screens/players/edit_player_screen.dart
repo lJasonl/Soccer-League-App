@@ -12,16 +12,29 @@ class EditPlayerScreen extends StatefulWidget {
   });
 
   @override
-  State<EditPlayerScreen> createState() => _EditPlayerScreenState();
+  State<EditPlayerScreen> createState() =>
+      _EditPlayerScreenState();
 }
 
-class _EditPlayerScreenState extends State<EditPlayerScreen> {
-  late final TextEditingController _firstNameController;
-  late final TextEditingController _lastNameController;
-  late final TextEditingController _jerseyNumberController;
-  late final TextEditingController _birthYearController;
-  late final TextEditingController _parentNameController;
-  late final TextEditingController _parentPhoneController;
+class _EditPlayerScreenState
+    extends State<EditPlayerScreen> {
+  late final TextEditingController
+      _firstNameController;
+
+  late final TextEditingController
+      _lastNameController;
+
+  late final TextEditingController
+      _jerseyNumberController;
+
+  late final TextEditingController
+      _birthYearController;
+
+  late final TextEditingController
+      _parentNameController;
+
+  late final TextEditingController
+      _parentPhoneController;
 
   late String _registrationStatus;
 
@@ -30,33 +43,58 @@ class _EditPlayerScreenState extends State<EditPlayerScreen> {
     super.initState();
 
     _firstNameController =
-        TextEditingController(text: widget.player.firstName);
+        TextEditingController(
+      text:
+          widget.player.firstName,
+    );
 
     _lastNameController =
-        TextEditingController(text: widget.player.lastName);
+        TextEditingController(
+      text:
+          widget.player.lastName,
+    );
 
     _jerseyNumberController =
         TextEditingController(
-          text: widget.player.jerseyNumber.toString(),
-        );
+      text: widget
+          .player.jerseyNumber
+          .toString(),
+    );
 
     _birthYearController =
         TextEditingController(
-          text: widget.player.birthYear.toString(),
-        );
+      text: widget
+          .player.birthYear
+          .toString(),
+    );
 
     _parentNameController =
         TextEditingController(
-          text: widget.player.parentName,
-        );
+      text:
+          widget.player.parentName,
+    );
 
     _parentPhoneController =
         TextEditingController(
-          text: widget.player.parentPhone,
-        );
+      text:
+          widget.player.parentPhone,
+    );
 
     _registrationStatus =
-        widget.player.registrationStatus;
+        widget.player
+            .registrationStatus;
+
+    if (![
+      'Approved',
+      'Pending',
+      'Waitlisted',
+      'Rejected',
+    ].contains(
+      _registrationStatus,
+    )) {
+      _registrationStatus =
+          'Approved';
+    }
   }
 
   @override
@@ -67,123 +105,211 @@ class _EditPlayerScreenState extends State<EditPlayerScreen> {
     _birthYearController.dispose();
     _parentNameController.dispose();
     _parentPhoneController.dispose();
+
     super.dispose();
   }
 
   void _saveChanges() {
-    final updatedPlayer = Player(
+    final updatedPlayer =
+        Player(
       id: widget.player.id,
-      teamId: widget.player.teamId,
-      firstName: _firstNameController.text,
-      lastName: _lastNameController.text,
+      teamId:
+          widget.player.teamId,
+      firstName:
+          _firstNameController.text,
+      lastName:
+          _lastNameController.text,
       jerseyNumber:
-          int.tryParse(_jerseyNumberController.text) ?? 0,
+          int.tryParse(
+                _jerseyNumberController
+                    .text,
+              ) ??
+              0,
       birthYear:
-          int.tryParse(_birthYearController.text) ?? 0,
-      parentName: _parentNameController.text,
-      parentPhone: _parentPhoneController.text,
-      registrationStatus: _registrationStatus,
+          int.tryParse(
+                _birthYearController
+                    .text,
+              ) ??
+              0,
+      parentName:
+          _parentNameController.text,
+      parentPhone:
+          _parentPhoneController.text,
+      registrationStatus:
+          _registrationStatus,
     );
 
-    LeagueDataService.updatePlayer(updatedPlayer);
+    LeagueDataService
+        .updatePlayer(
+      updatedPlayer,
+    );
 
-    Navigator.pop(context);
+    Navigator.pop(
+      context,
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Player'),
+        title:
+            const Text(
+          'Edit Player',
+        ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body:
+          SingleChildScrollView(
+        padding:
+            const EdgeInsets.all(
+          16,
+        ),
         child: Column(
           children: [
             TextField(
-              controller: _firstNameController,
-              decoration: const InputDecoration(
-                labelText: 'First Name',
+              controller:
+                  _firstNameController,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'First Name',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _lastNameController,
-              decoration: const InputDecoration(
-                labelText: 'Last Name',
+              controller:
+                  _lastNameController,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Last Name',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _jerseyNumberController,
-              decoration: const InputDecoration(
-                labelText: 'Jersey Number',
+              controller:
+                  _jerseyNumberController,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Jersey Number',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _birthYearController,
-              decoration: const InputDecoration(
-                labelText: 'Birth Year',
+              controller:
+                  _birthYearController,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Birth Year',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _parentNameController,
-              decoration: const InputDecoration(
-                labelText: 'Parent Name',
+              controller:
+                  _parentNameController,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Parent Name',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             TextField(
-              controller: _parentPhoneController,
-              decoration: const InputDecoration(
-                labelText: 'Parent Phone',
+              controller:
+                  _parentPhoneController,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Parent Phone',
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
-            DropdownButtonFormField<String>(
-              initialValue: _registrationStatus,
+            DropdownButtonFormField<
+                String>(
+              initialValue:
+                  _registrationStatus,
               items: const [
                 DropdownMenuItem(
-                  value: 'Active',
-                  child: Text('Active'),
+                  value:
+                      'Approved',
+                  child: Text(
+                    'Approved',
+                  ),
                 ),
                 DropdownMenuItem(
-                  value: 'Pending',
-                  child: Text('Pending'),
+                  value:
+                      'Pending',
+                  child: Text(
+                    'Pending',
+                  ),
                 ),
                 DropdownMenuItem(
-                  value: 'Inactive',
-                  child: Text('Inactive'),
+                  value:
+                      'Waitlisted',
+                  child: Text(
+                    'Waitlisted',
+                  ),
+                ),
+                DropdownMenuItem(
+                  value:
+                      'Rejected',
+                  child: Text(
+                    'Rejected',
+                  ),
                 ),
               ],
-              onChanged: (value) {
+              onChanged:
+                  (value) {
                 setState(() {
-                  _registrationStatus = value!;
+                  _registrationStatus =
+                      value!;
                 });
               },
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
 
             SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _saveChanges,
-                child: const Text('Save Changes'),
+              width:
+                  double.infinity,
+              child:
+                  ElevatedButton(
+                onPressed:
+                    _saveChanges,
+                child:
+                    const Text(
+                  'Save Changes',
+                ),
               ),
             ),
           ],
