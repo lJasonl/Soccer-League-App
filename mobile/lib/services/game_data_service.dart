@@ -12,24 +12,57 @@ class GameDataService {
     }
 
     games = box.values.map((item) {
-      final data = Map<String, dynamic>.from(item);
+      final data =
+          Map<String, dynamic>.from(
+        item,
+      );
 
       return Game(
         id: data['id'] ?? '',
-        homeTeam: data['homeTeam'] ?? '',
-        awayTeam: data['awayTeam'] ?? '',
-        gameDate: data['gameDate'] ?? '',
-        gameTime: data['gameTime'] ?? '',
-        field: data['field'] ?? '',
 
-        // Backward compatible
-        refereeId:
-            data['refereeId'] ?? '',
-        refereeName:
-            data['refereeName'] ?? '',
+        homeTeam:
+            data['homeTeam'] ?? '',
+        awayTeam:
+            data['awayTeam'] ?? '',
+
+        gameDate:
+            data['gameDate'] ?? '',
+        gameTime:
+            data['gameTime'] ?? '',
+
+        field:
+            data['field'] ?? '',
+
+        // Backward compatibility
+        centerRefereeId:
+            data['centerRefereeId'] ??
+                data['refereeId'] ??
+                '',
+
+        centerRefereeName:
+            data['centerRefereeName'] ??
+                data['refereeName'] ??
+                '',
+
+        ar1RefereeId:
+            data['ar1RefereeId'] ??
+                '',
+
+        ar1RefereeName:
+            data['ar1RefereeName'] ??
+                '',
+
+        ar2RefereeId:
+            data['ar2RefereeId'] ??
+                '',
+
+        ar2RefereeName:
+            data['ar2RefereeName'] ??
+                '',
 
         homeScore:
             data['homeScore'] ?? 0,
+
         awayScore:
             data['awayScore'] ?? 0,
       );
@@ -37,24 +70,53 @@ class GameDataService {
   }
 
   static Future<void> saveGames() async {
-    final box = StorageService.getGamesBox();
+    final box =
+        StorageService.getGamesBox();
 
     await box.clear();
 
     for (final game in games) {
       await box.add({
         'id': game.id,
-        'homeTeam': game.homeTeam,
-        'awayTeam': game.awayTeam,
-        'gameDate': game.gameDate,
-        'gameTime': game.gameTime,
-        'field': game.field,
 
-        'refereeId': game.refereeId,
-        'refereeName': game.refereeName,
+        'homeTeam':
+            game.homeTeam,
 
-        'homeScore': game.homeScore,
-        'awayScore': game.awayScore,
+        'awayTeam':
+            game.awayTeam,
+
+        'gameDate':
+            game.gameDate,
+
+        'gameTime':
+            game.gameTime,
+
+        'field':
+            game.field,
+
+        'centerRefereeId':
+            game.centerRefereeId,
+
+        'centerRefereeName':
+            game.centerRefereeName,
+
+        'ar1RefereeId':
+            game.ar1RefereeId,
+
+        'ar1RefereeName':
+            game.ar1RefereeName,
+
+        'ar2RefereeId':
+            game.ar2RefereeId,
+
+        'ar2RefereeName':
+            game.ar2RefereeName,
+
+        'homeScore':
+            game.homeScore,
+
+        'awayScore':
+            game.awayScore,
       });
     }
   }
@@ -71,11 +133,14 @@ class GameDataService {
     Game updatedGame,
   ) async {
     final index = games.indexWhere(
-      (game) => game.id == updatedGame.id,
+      (game) =>
+          game.id ==
+          updatedGame.id,
     );
 
     if (index != -1) {
-      games[index] = updatedGame;
+      games[index] =
+          updatedGame;
 
       await saveGames();
     }
@@ -85,7 +150,8 @@ class GameDataService {
     String gameId,
   ) async {
     games.removeWhere(
-      (game) => game.id == gameId,
+      (game) =>
+          game.id == gameId,
     );
 
     await saveGames();

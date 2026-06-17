@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/game.dart';
 import '../../models/referee.dart';
+
 import '../../services/game_data_service.dart';
 import '../../services/referee_data_service.dart';
 
@@ -35,8 +36,9 @@ class _EditGameScreenState
   late final TextEditingController
       _fieldController;
 
-  late String _refereeId;
-  late String _refereeName;
+  Referee? _centerReferee;
+  Referee? _ar1Referee;
+  Referee? _ar2Referee;
 
   @override
   void initState() {
@@ -67,11 +69,38 @@ class _EditGameScreenState
       text: widget.game.field,
     );
 
-    _refereeId =
-        widget.game.refereeId;
+    try {
+      _centerReferee =
+          RefereeDataService.referees
+              .firstWhere(
+        (r) =>
+            r.id ==
+            widget.game
+                .centerRefereeId,
+      );
+    } catch (_) {}
 
-    _refereeName =
-        widget.game.refereeName;
+    try {
+      _ar1Referee =
+          RefereeDataService.referees
+              .firstWhere(
+        (r) =>
+            r.id ==
+            widget.game
+                .ar1RefereeId,
+      );
+    } catch (_) {}
+
+    try {
+      _ar2Referee =
+          RefereeDataService.referees
+              .firstWhere(
+        (r) =>
+            r.id ==
+            widget.game
+                .ar2RefereeId,
+      );
+    } catch (_) {}
   }
 
   @override
@@ -81,33 +110,65 @@ class _EditGameScreenState
     _dateController.dispose();
     _timeController.dispose();
     _fieldController.dispose();
+
     super.dispose();
   }
 
   Future<void> _saveGame() async {
     final updatedGame = Game(
       id: widget.game.id,
+
       homeTeam:
           _homeTeamController.text,
+
       awayTeam:
           _awayTeamController.text,
+
       gameDate:
           _dateController.text,
+
       gameTime:
           _timeController.text,
+
       field:
           _fieldController.text,
 
-      refereeId: _refereeId,
-      refereeName: _refereeName,
+      centerRefereeId:
+          _centerReferee?.id ??
+              '',
+
+      centerRefereeName:
+          _centerReferee
+                  ?.fullName ??
+              '',
+
+      ar1RefereeId:
+          _ar1Referee?.id ??
+              '',
+
+      ar1RefereeName:
+          _ar1Referee
+                  ?.fullName ??
+              '',
+
+      ar2RefereeId:
+          _ar2Referee?.id ??
+              '',
+
+      ar2RefereeName:
+          _ar2Referee
+                  ?.fullName ??
+              '',
 
       homeScore:
           widget.game.homeScore,
+
       awayScore:
           widget.game.awayScore,
     );
 
-    await GameDataService.updateGame(
+    await GameDataService
+        .updateGame(
       updatedGame,
     );
 
@@ -117,9 +178,16 @@ class _EditGameScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    final List<Referee> referees =
-        RefereeDataService.referees;
+  Widget build(
+    BuildContext context,
+  ) {
+    final referees =
+        RefereeDataService
+            .referees
+            .where(
+              (r) => r.isActive,
+            )
+            .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -129,7 +197,9 @@ class _EditGameScreenState
       ),
       body: SingleChildScrollView(
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(
+          16,
+        ),
         child: Column(
           children: [
             TextField(
@@ -213,23 +283,23 @@ class _EditGameScreenState
             ),
 
             DropdownButtonFormField<
-                String>(
-              value: _refereeId.isEmpty
-                  ? null
-                  : _refereeId,
+                Referee>(
+              value:
+                  _centerReferee,
               decoration:
                   const InputDecoration(
                 labelText:
-                    'Assigned Referee',
+                    'Center Referee',
                 border:
                     OutlineInputBorder(),
               ),
               items: referees
                   .map(
                     (referee) =>
-                        DropdownMenuItem(
+                        DropdownMenuItem<
+                            Referee>(
                       value:
-                          referee.id,
+                          referee,
                       child: Text(
                         referee
                             .fullName,
@@ -237,24 +307,85 @@ class _EditGameScreenState
                     ),
                   )
                   .toList(),
-              onChanged: (value) {
-                if (value == null) {
-                  return;
-                }
-
-                final referee =
-                    referees
-                        .firstWhere(
-                  (r) =>
-                      r.id == value,
-                );
-
+              onChanged:
+                  (value) {
                 setState(() {
-                  _refereeId =
-                      referee.id;
-                  _refereeName =
-                      referee
-                          .fullName;
+                  _centerReferee =
+                      value;
+                });
+              },
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            DropdownButtonFormField<
+                Referee>(
+              value: _ar1Referee,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Assistant Referee 1',
+                border:
+                    OutlineInputBorder(),
+              ),
+              items: referees
+                  .map(
+                    (referee) =>
+                        DropdownMenuItem<
+                            Referee>(
+                      value:
+                          referee,
+                      child: Text(
+                        referee
+                            .fullName,
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged:
+                  (value) {
+                setState(() {
+                  _ar1Referee =
+                      value;
+                });
+              },
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            DropdownButtonFormField<
+                Referee>(
+              value: _ar2Referee,
+              decoration:
+                  const InputDecoration(
+                labelText:
+                    'Assistant Referee 2',
+                border:
+                    OutlineInputBorder(),
+              ),
+              items: referees
+                  .map(
+                    (referee) =>
+                        DropdownMenuItem<
+                            Referee>(
+                      value:
+                          referee,
+                      child: Text(
+                        referee
+                            .fullName,
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged:
+                  (value) {
+                setState(() {
+                  _ar2Referee =
+                      value;
                 });
               },
             ),

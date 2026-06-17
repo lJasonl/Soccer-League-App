@@ -5,6 +5,8 @@ import '../referee/screen.dart';
 import '../users/screen.dart';
 import '../scholarships/scholarship_screen.dart';
 
+import 'division_management_screen.dart';
+
 import '../../services/coach_data_service.dart';
 import '../../services/referee_data_service.dart';
 import '../../services/user_data_service.dart';
@@ -163,236 +165,253 @@ class Screen extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-
           _adminCard(
-            context,
-            icon:
-                Icons.volunteer_activism,
-            title:
-                'Scholarship Management',
-            subtitle:
-                '${ScholarshipDataService.activeFamilyCount} Active Families',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const ScholarshipScreen(),
-                ),
-              );
-            },
-          ),
-
-          _adminCard(
-            context,
-            icon:
-                Icons.campaign,
-            title:
-                'Announcements',
-            subtitle:
-                'Manage league announcements',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const AnnouncementManagementScreen(),
-                ),
-              );
-            },
-          ),
-
-          _adminCard(
-            context,
-            icon:
-                Icons.attach_money,
-            title:
-                'Registration Fees',
-            subtitle:
-                'Manage registration pricing',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const RegistrationFeeScreen(),
-                ),
-              );
-            },
-          ),
-
-          _adminCard(
-            context,
-            icon:
-                Icons.calendar_month,
-            title:
-                'Season Management',
-            subtitle:
-                'Manage league seasons',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const SeasonManagementScreen(),
-                ),
-              );
-            },
-          ),
-
-          _adminCard(
-            context,
-            icon:
-                Icons.sports_soccer,
-            title:
-                'Coach Management',
-            subtitle:
-                '${CoachDataService.coaches.length} Coaches',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const CoachScreen(),
-                ),
-              );
-            },
-          ),
-
-          _adminCard(
-            context,
-            icon:
-                Icons.gavel,
-            title:
-                'Referee Management',
-            subtitle:
-                '${RefereeDataService.referees.length} Referees',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const RefereeScreen(),
-                ),
-              );
-            },
-          ),
-
-          _adminCard(
-            context,
-            icon:
-                Icons.people,
-            title:
-                'User Roles',
-            subtitle:
-                '${UserDataService.users.length} Users',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const UserScreen(),
-                ),
-              );
-            },
-          ),
-
-          _adminCard(
-            context,
-            icon:
-                Icons.settings,
-            title:
-                'League Settings',
-            subtitle:
-                'Configuration & preferences',
-            onTap: () {},
-          ),
-        ],
+  context,
+  icon:
+      Icons.volunteer_activism,
+  title:
+      'Scholarship Management',
+  subtitle:
+      '${ScholarshipDataService.activeFamilyCount} Active Families',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const ScholarshipScreen(),
       ),
     );
-  }
+  },
+),
 
-  Widget _statCard(
-    String title,
-    String value,
-    IconData icon,
-  ) {
-    return Card(
-      child: Padding(
-        padding:
-            const EdgeInsets.all(
-          12,
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: dcsaNavy,
-            ),
-            const SizedBox(
-              height: 6,
-            ),
-            Text(
-              value,
-              style:
-                  const TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-            Text(
-              title,
-              style:
-                  const TextStyle(
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
+_adminCard(
+  context,
+  icon:
+      Icons.campaign,
+  title:
+      'Announcements',
+  subtitle:
+      'Manage league announcements',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const AnnouncementManagementScreen(),
       ),
     );
-  }
+  },
+),
 
-  Widget _adminCard(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      margin:
-          const EdgeInsets.only(
-        bottom: 12,
+_adminCard(
+  context,
+  icon:
+      Icons.attach_money,
+  title:
+      'Registration Fees',
+  subtitle:
+      'Manage registration pricing',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const RegistrationFeeScreen(),
       ),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor:
-              dcsaNavy.withValues(
-            alpha: .1,
-          ),
-          child: Icon(
+    );
+  },
+),
+
+_adminCard(
+  context,
+  icon:
+      Icons.calendar_month,
+  title:
+      'Season Management',
+  subtitle:
+      'Manage league seasons',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const SeasonManagementScreen(),
+      ),
+    );
+  },
+),
+
+_adminCard(
+  context,
+  icon: Icons.groups,
+  title:
+      'Division Management',
+  subtitle:
+      'Manage league divisions',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const DivisionManagementScreen(),
+      ),
+    );
+  },
+),
+
+_adminCard(
+  context,
+  icon:
+      Icons.sports_soccer,
+  title:
+      'Coach Management',
+  subtitle:
+      '${CoachDataService.coaches.length} Coaches',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const CoachScreen(),
+      ),
+    );
+  },
+),
+
+_adminCard(
+  context,
+  icon:
+      Icons.gavel,
+  title:
+      'Referee Management',
+  subtitle:
+      '${RefereeDataService.referees.length} Referees',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const RefereeScreen(),
+      ),
+    );
+  },
+),
+
+_adminCard(
+  context,
+  icon:
+      Icons.people,
+  title:
+      'User Roles',
+  subtitle:
+      '${UserDataService.users.length} Users',
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            const UserScreen(),
+      ),
+    );
+  },
+),
+
+_adminCard(
+  context,
+  icon:
+      Icons.settings,
+  title:
+      'League Settings',
+  subtitle:
+      'Configuration & preferences',
+  onTap: () {},
+),
+
+],
+),
+);
+}
+Widget _statCard(
+  String title,
+  String value,
+  IconData icon,
+) {
+  return Card(
+    child: Padding(
+      padding:
+          const EdgeInsets.all(
+        12,
+      ),
+      child: Column(
+        children: [
+          Icon(
             icon,
             color: dcsaNavy,
           ),
-        ),
-        title: Text(
-          title,
-          style:
-              const TextStyle(
-            fontWeight:
-                FontWeight.bold,
+          const SizedBox(
+            height: 6,
           ),
-        ),
-        subtitle: Text(
-          subtitle,
-        ),
-        trailing: const Icon(
-          Icons.chevron_right,
-        ),
-        onTap: onTap,
+          Text(
+            value,
+            style:
+                const TextStyle(
+              fontSize: 22,
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+          Text(
+            title,
+            style:
+                const TextStyle(
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+Widget _adminCard(
+  BuildContext context, {
+  required IconData icon,
+  required String title,
+  required String subtitle,
+  required VoidCallback onTap,
+}) {
+  return Card(
+    margin:
+        const EdgeInsets.only(
+      bottom: 12,
+    ),
+    child: ListTile(
+      leading: CircleAvatar(
+        backgroundColor:
+            dcsaNavy.withValues(
+          alpha: .1,
+        ),
+        child: Icon(
+          icon,
+          color: dcsaNavy,
+        ),
+      ),
+      title: Text(
+        title,
+        style:
+            const TextStyle(
+          fontWeight:
+              FontWeight.bold,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+      ),
+      trailing: const Icon(
+        Icons.chevron_right,
+      ),
+      onTap: onTap,
+    ),
+  );
+}
 }

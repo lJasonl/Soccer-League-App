@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../models/coach.dart';
 import '../../models/team.dart';
+import '../../models/division.dart';
+
 import '../../services/coach_data_service.dart';
 import '../../services/team_data_service.dart';
+import '../../services/division_data_service.dart';
 
 class AddTeamScreen extends StatefulWidget {
   const AddTeamScreen({super.key});
@@ -21,7 +24,7 @@ class _AddTeamScreenState
   final _teamNameController =
       TextEditingController();
 
-  String _division = 'U6';
+  String? _division;
 
   Coach? _selectedCoach;
 
@@ -41,13 +44,16 @@ class _AddTeamScreenState
       id: DateTime.now()
           .millisecondsSinceEpoch
           .toString(),
-      name: _teamNameController.text,
-      division: _division,
+      name: _teamNameController.text
+          .trim(),
+      division:
+          _division ?? '',
       coachId:
           _selectedCoach?.id ?? '',
       coachName:
-          _selectedCoach?.fullName ??
-          '',
+          _selectedCoach
+                  ?.fullName ??
+              '',
     );
 
     await TeamDataService.addTeam(
@@ -60,7 +66,9 @@ class _AddTeamScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final availableCoaches =
         CoachDataService.coaches
             .where(
@@ -73,6 +81,17 @@ class _AddTeamScreenState
             )
             .toList();
 
+    final List<Division>
+        divisions =
+        DivisionDataService
+            .activeDivisions;
+
+    if (_division == null &&
+        divisions.isNotEmpty) {
+      _division =
+          divisions.first.name;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -81,7 +100,9 @@ class _AddTeamScreenState
       ),
       body: SingleChildScrollView(
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(
+          16,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
@@ -101,16 +122,18 @@ class _AddTeamScreenState
                       value.isEmpty) {
                     return 'Enter team name';
                   }
+
                   return null;
                 },
               ),
+
               const SizedBox(
                 height: 16,
               ),
+
               DropdownButtonFormField<
                   String>(
-                initialValue:
-                    _division,
+                value: _division,
                 decoration:
                     const InputDecoration(
                   labelText:
@@ -118,42 +141,31 @@ class _AddTeamScreenState
                   border:
                       OutlineInputBorder(),
                 ),
-                items: const [
-                  DropdownMenuItem(
-                    value: 'U6',
-                    child: Text(
-                      'U6',
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: 'U8',
-                    child: Text(
-                      'U8',
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: 'U10',
-                    child: Text(
-                      'U10',
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: 'U12',
-                    child: Text(
-                      'U12',
-                    ),
-                  ),
-                ],
+                items: divisions
+                    .map(
+                      (division) =>
+                          DropdownMenuItem<
+                              String>(
+                        value:
+                            division.name,
+                        child: Text(
+                          division.name,
+                        ),
+                      ),
+                    )
+                    .toList(),
                 onChanged: (value) {
                   setState(() {
                     _division =
-                        value!;
+                        value;
                   });
                 },
               ),
+
               const SizedBox(
                 height: 16,
               ),
+
               DropdownButtonFormField<
                   Coach>(
                 decoration:
@@ -185,9 +197,11 @@ class _AddTeamScreenState
                   });
                 },
               ),
+
               const SizedBox(
                 height: 24,
               ),
+
               SizedBox(
                 width:
                     double.infinity,

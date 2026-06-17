@@ -48,45 +48,78 @@ class _GameResultScreenState
     super.dispose();
   }
 
-  void _saveResult() {
+  Future<void> _saveResult() async {
     final updatedGame = Game(
       id: widget.game.id,
+
       homeTeam:
           widget.game.homeTeam,
+
       awayTeam:
           widget.game.awayTeam,
+
       gameDate:
           widget.game.gameDate,
+
       gameTime:
           widget.game.gameTime,
-      field: widget.game.field,
 
-      refereeId:
-          widget.game.refereeId,
-      refereeName:
-          widget.game.refereeName,
+      field:
+          widget.game.field,
+
+      centerRefereeId:
+          widget.game
+              .centerRefereeId,
+
+      centerRefereeName:
+          widget.game
+              .centerRefereeName,
+
+      ar1RefereeId:
+          widget.game
+              .ar1RefereeId,
+
+      ar1RefereeName:
+          widget.game
+              .ar1RefereeName,
+
+      ar2RefereeId:
+          widget.game
+              .ar2RefereeId,
+
+      ar2RefereeName:
+          widget.game
+              .ar2RefereeName,
 
       homeScore:
           int.tryParse(
-            _homeScoreController.text,
+            _homeScoreController
+                .text,
           ) ??
           0,
+
       awayScore:
           int.tryParse(
-            _awayScoreController.text,
+            _awayScoreController
+                .text,
           ) ??
           0,
     );
 
-    GameDataService.updateGame(
+    await GameDataService
+        .updateGame(
       updatedGame,
     );
+
+    if (!mounted) return;
 
     Navigator.pop(context);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -95,7 +128,9 @@ class _GameResultScreenState
       ),
       body: Padding(
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(
+          16,
+        ),
         child: Column(
           children: [
             Text(

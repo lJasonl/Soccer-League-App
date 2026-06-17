@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/game.dart';
 import '../../models/referee.dart';
 import '../../models/team.dart';
+
 import '../../services/game_data_service.dart';
 import '../../services/referee_data_service.dart';
 import '../../services/team_data_service.dart';
@@ -17,13 +18,15 @@ class AddGameScreen extends StatefulWidget {
 
 class _AddGameScreenState
     extends State<AddGameScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey =
+      GlobalKey<FormState>();
 
   String? _homeTeam;
   String? _awayTeam;
 
-  String? _refereeId;
-  String? _refereeName;
+  Referee? _centerReferee;
+  Referee? _ar1Referee;
+  Referee? _ar2Referee;
 
   final _fieldController =
       TextEditingController();
@@ -38,11 +41,15 @@ class _AddGameScreenState
   }
 
   Future<void> _pickDate() async {
-    final date = await showDatePicker(
+    final date =
+        await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2024),
-      lastDate: DateTime(2035),
+      initialDate:
+          DateTime.now(),
+      firstDate:
+          DateTime(2024),
+      lastDate:
+          DateTime(2035),
     );
 
     if (date != null) {
@@ -53,7 +60,8 @@ class _AddGameScreenState
   }
 
   Future<void> _pickTime() async {
-    final time = await showTimePicker(
+    final time =
+        await showTimePicker(
       context: context,
       initialTime:
           TimeOfDay.now(),
@@ -113,29 +121,54 @@ class _AddGameScreenState
       id: DateTime.now()
           .millisecondsSinceEpoch
           .toString(),
+
       homeTeam: _homeTeam!,
       awayTeam: _awayTeam!,
+
       gameDate:
           '${_selectedDate!.month}/${_selectedDate!.day}/${_selectedDate!.year}',
-      gameTime:
-          _selectedTime!.format(
-        context,
-      ),
-      field:
-          _fieldController.text.trim(),
 
-      refereeId:
-          _refereeId ?? '',
-      refereeName:
-          _refereeName ?? '',
+      gameTime:
+          _selectedTime!
+              .format(context),
+
+      field:
+          _fieldController.text
+              .trim(),
+
+      centerRefereeId:
+          _centerReferee?.id ??
+              '',
+
+      centerRefereeName:
+          _centerReferee
+                  ?.fullName ??
+              '',
+
+      ar1RefereeId:
+          _ar1Referee?.id ??
+              '',
+
+      ar1RefereeName:
+          _ar1Referee
+                  ?.fullName ??
+              '',
+
+      ar2RefereeId:
+          _ar2Referee?.id ??
+              '',
+
+      ar2RefereeName:
+          _ar2Referee
+                  ?.fullName ??
+              '',
 
       homeScore: 0,
       awayScore: 0,
     );
 
-    await GameDataService.addGame(
-      game,
-    );
+    await GameDataService
+        .addGame(game);
 
     if (!mounted) return;
 
@@ -143,14 +176,19 @@ class _AddGameScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final List<Team> teams =
         TeamDataService.teams;
 
-    final List<Referee> referees =
-        RefereeDataService.referees
+    final List<Referee>
+        referees =
+        RefereeDataService
+            .referees
             .where(
-              (r) => r.isActive,
+              (r) =>
+                  r.isActive,
             )
             .toList();
 
@@ -160,9 +198,12 @@ class _AddGameScreenState
           'Add Game',
         ),
       ),
-      body: SingleChildScrollView(
+      body:
+          SingleChildScrollView(
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(
+          16,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
@@ -189,13 +230,17 @@ class _AddGameScreenState
                       ),
                     )
                     .toList(),
-                onChanged: (value) {
+                onChanged:
+                    (value) {
                   setState(() {
-                    _homeTeam = value;
+                    _homeTeam =
+                        value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
+                validator:
+                    (value) {
+                  if (value ==
+                      null) {
                     return 'Select a home team';
                   }
                   return null;
@@ -228,13 +273,17 @@ class _AddGameScreenState
                       ),
                     )
                     .toList(),
-                onChanged: (value) {
+                onChanged:
+                    (value) {
                   setState(() {
-                    _awayTeam = value;
+                    _awayTeam =
+                        value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
+                validator:
+                    (value) {
+                  if (value ==
+                      null) {
                     return 'Select an away team';
                   }
                   return null;
@@ -246,39 +295,109 @@ class _AddGameScreenState
               ),
 
               DropdownButtonFormField<
-                  String>(
-                value: _refereeId,
+                  Referee>(
+                value:
+                    _centerReferee,
                 decoration:
                     const InputDecoration(
                   labelText:
-                      'Referee (Optional)',
+                      'Center Referee',
                   border:
                       OutlineInputBorder(),
                 ),
                 items: referees
                     .map(
                       (referee) =>
-                          DropdownMenuItem(
+                          DropdownMenuItem<
+                              Referee>(
                         value:
-                            referee.id,
+                            referee,
                         child: Text(
-                          referee.fullName,
+                          referee
+                              .fullName,
                         ),
                       ),
                     )
                     .toList(),
-                onChanged: (value) {
-                  final referee =
-                      referees.firstWhere(
-                    (r) =>
-                        r.id == value,
-                  );
-
+                onChanged:
+                    (value) {
                   setState(() {
-                    _refereeId =
-                        referee.id;
-                    _refereeName =
-                        referee.fullName;
+                    _centerReferee =
+                        value;
+                  });
+                },
+              ),
+
+              const SizedBox(
+                height: 16,
+              ),
+
+              DropdownButtonFormField<
+                  Referee>(
+                value: _ar1Referee,
+                decoration:
+                    const InputDecoration(
+                  labelText:
+                      'Assistant Referee 1',
+                  border:
+                      OutlineInputBorder(),
+                ),
+                items: referees
+                    .map(
+                      (referee) =>
+                          DropdownMenuItem<
+                              Referee>(
+                        value:
+                            referee,
+                        child: Text(
+                          referee
+                              .fullName,
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged:
+                    (value) {
+                  setState(() {
+                    _ar1Referee =
+                        value;
+                  });
+                },
+              ),
+
+              const SizedBox(
+                height: 16,
+              ),
+
+              DropdownButtonFormField<
+                  Referee>(
+                value: _ar2Referee,
+                decoration:
+                    const InputDecoration(
+                  labelText:
+                      'Assistant Referee 2',
+                  border:
+                      OutlineInputBorder(),
+                ),
+                items: referees
+                    .map(
+                      (referee) =>
+                          DropdownMenuItem<
+                              Referee>(
+                        value:
+                            referee,
+                        child: Text(
+                          referee
+                              .fullName,
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged:
+                    (value) {
+                  setState(() {
+                    _ar2Referee =
+                        value;
                   });
                 },
               ),
@@ -292,19 +411,25 @@ class _AddGameScreenState
                     RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius
-                          .circular(8),
+                          .circular(
+                    8,
+                  ),
                   side:
                       const BorderSide(),
                 ),
                 title: Text(
-                  _selectedDate == null
+                  _selectedDate ==
+                          null
                       ? 'Select Date'
                       : '${_selectedDate!.month}/${_selectedDate!.day}/${_selectedDate!.year}',
                 ),
-                trailing: const Icon(
-                  Icons.calendar_month,
+                trailing:
+                    const Icon(
+                  Icons
+                      .calendar_month,
                 ),
-                onTap: _pickDate,
+                onTap:
+                    _pickDate,
               ),
 
               const SizedBox(
@@ -316,22 +441,28 @@ class _AddGameScreenState
                     RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius
-                          .circular(8),
+                          .circular(
+                    8,
+                  ),
                   side:
                       const BorderSide(),
                 ),
                 title: Text(
-                  _selectedTime == null
+                  _selectedTime ==
+                          null
                       ? 'Select Time'
                       : _selectedTime!
                           .format(
                           context,
                         ),
                 ),
-                trailing: const Icon(
-                  Icons.access_time,
+                trailing:
+                    const Icon(
+                  Icons
+                      .access_time,
                 ),
-                onTap: _pickTime,
+                onTap:
+                    _pickTime,
               ),
 
               const SizedBox(
@@ -348,8 +479,10 @@ class _AddGameScreenState
                   border:
                       OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null ||
+                validator:
+                    (value) {
+                  if (value ==
+                          null ||
                       value
                           .trim()
                           .isEmpty) {
@@ -366,10 +499,12 @@ class _AddGameScreenState
               SizedBox(
                 width:
                     double.infinity,
-                child: ElevatedButton(
+                child:
+                    ElevatedButton(
                   onPressed:
                       _saveGame,
-                  child: const Text(
+                  child:
+                      const Text(
                     'Save Game',
                   ),
                 ),

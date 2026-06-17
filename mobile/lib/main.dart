@@ -20,6 +20,7 @@ import 'services/user_data_service.dart';
 import 'services/scholarship_data_service.dart';
 import 'services/volunteer_data_service.dart';
 import 'services/announcement_data_service.dart';
+import 'services/division_data_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +48,9 @@ Future<void> main() async {
 
   await AnnouncementDataService
       .loadAnnouncements();
+
+  await DivisionDataService
+      .loadDivisions();
 
   runApp(
     const SoccerLeagueApp(),

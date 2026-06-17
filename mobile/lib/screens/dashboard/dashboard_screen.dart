@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../models/announcement.dart';
+
+import '../../services/announcement_data_service.dart';
 import '../../services/coach_data_service.dart';
 import '../../services/game_data_service.dart';
 import '../../services/player_data_service.dart';
@@ -65,401 +68,498 @@ class _DashboardScreenState
           entry.hoursWorked,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Darke County Soccer Association',
-        ),
+    final Announcement?
+        activeAnnouncement =
+        AnnouncementDataService
+            .getActiveAnnouncement();
+            return Scaffold(
+  appBar: AppBar(
+    title: const Text(
+      'Darke County Soccer Association',
+    ),
+  ),
+  body: SingleChildScrollView(
+    padding:
+        const EdgeInsets.all(
+      16,
+    ),
+    child: Column(
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
+      children: [
+        _buildHeroBanner
+        (
+  seasonName,
+),
+
+const SizedBox(
+  height: 16,
+),
+
+if (activeAnnouncement !=
+    null)
+  Card(
+    color:
+        Colors.amber.shade100,
+    elevation: 3,
+    child: Padding(
+      padding:
+          const EdgeInsets.all(
+        16,
       ),
-      body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.all(
-          16,
-        ),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
-            _buildHeroBanner(
-              seasonName,
-            ),
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            const Text(
-              'League Overview',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight:
-                    FontWeight.bold,
-                color: dcsaNavy,
+      child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment
+                .start,
+        children: [
+          Row(
+            children: const [
+              Icon(
+                Icons.campaign,
               ),
-            ),
-
-            const SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _statCard(
-                    'Teams',
-                    TeamDataService
-                        .teams.length
-                        .toString(),
-                    Icons.groups,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: _statCard(
-                    'Players',
-                    PlayerDataService
-                        .players.length
-                        .toString(),
-                    Icons.person,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 8,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _statCard(
-                    'Coaches',
-                    CoachDataService
-                        .coaches.length
-                        .toString(),
-                    Icons.sports,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: _statCard(
-                    'Referees',
-                    RefereeDataService
-                        .referees.length
-                        .toString(),
-                    Icons.gavel,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 8,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _statCard(
-                    'Scholarships',
-                    ScholarshipDataService
-                        .activeFamilyCount
-                        .toString(),
-                    Icons
-                        .volunteer_activism,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: _statCard(
-                    'Volunteer Hrs',
-                    volunteerHours
-                        .toStringAsFixed(
-                      0,
-                    ),
-                    Icons.handshake,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 24,
-            ),
-
-            const Text(
-              'League Activity',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight:
-                    FontWeight.bold,
-                color: dcsaNavy,
+              SizedBox(
+                width: 8,
               ),
-            ),
-
-            const SizedBox(
-              height: 10,
-            ),
-
-            Card(
-              elevation: 3,
-              child: Padding(
-                padding:
-                    const EdgeInsets.all(
-                  16,
-                ),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(
-                        Icons
-                            .app_registration,
-                      ),
-                      title: const Text(
-                        'Registrations',
-                      ),
-                      trailing: Text(
-                        RegistrationDataService
-                            .registrations
-                            .length
-                            .toString(),
-                        style:
-                            const TextStyle(
-                          fontWeight:
-                              FontWeight
-                                  .bold,
-                        ),
-                      ),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(
-                        Icons
-                            .sports_soccer,
-                      ),
-                      title: const Text(
-                        'Games Scheduled',
-                      ),
-                      trailing: Text(
-                        GameDataService
-                            .games.length
-                            .toString(),
-                        style:
-                            const TextStyle(
-                          fontWeight:
-                              FontWeight
-                                  .bold,
-                        ),
-                      ),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(
-                        Icons.people,
-                      ),
-                      title: const Text(
-                        'Scholarship Families',
-                      ),
-                      trailing: Text(
-                        ScholarshipDataService
-                            .activeFamilyCount
-                            .toString(),
-                        style:
-                            const TextStyle(
-                          fontWeight:
-                              FontWeight
-                                  .bold,
-                        ),
-                      ),
-                    ),
-                  ],
+              Text(
+                'League Announcement',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight:
+                      FontWeight.bold,
                 ),
               ),
-            ),
+            ],
+          ),
 
-            const SizedBox(
-              height: 24,
-            ),
+          const SizedBox(
+            height: 10,
+          ),
 
-            const Text(
-              'Upcoming Games',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight:
-                    FontWeight.bold,
-                color: dcsaNavy,
-              ),
+          Text(
+            activeAnnouncement
+                .title,
+            style:
+                const TextStyle(
+              fontSize: 16,
+              fontWeight:
+                  FontWeight.bold,
             ),
+          ),
 
-            const SizedBox(
-              height: 10,
-            ),
+          const SizedBox(
+            height: 6,
+          ),
 
-            if (upcomingGames.isEmpty)
-              const Card(
-                child: Padding(
-                  padding:
-                      EdgeInsets.all(
-                    20,
-                  ),
-                  child: Text(
-                    'No scheduled games.',
-                  ),
-                ),
-              ),            ...upcomingGames.map(
-              (game) => Card(
-                elevation: 3,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.all(
-                    20,
-                  ),
-                  child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
-                    children: [
-                      Text(
-                        '${game.homeTeam} vs ${game.awayTeam}',
-                        style:
-                            const TextStyle(
-                          fontSize: 20,
-                          fontWeight:
-                              FontWeight.bold,
-                        ),
-                      ),
-                      const Divider(),
-                      Text(
-                        '📅 ${game.gameDate}',
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        '⏰ ${game.gameTime}',
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        '📍 ${game.field}',
-                      ),
-                      if (game
-                          .refereeName
-                          .isNotEmpty)
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(
-                            top: 4,
-                          ),
-                          child: Text(
-                            '⚖ Referee: ${game.refereeName}',
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(
-              height: 24,
-            ),
-
-            const Text(
-              'League Menu',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight:
-                    FontWeight.bold,
-                color: dcsaNavy,
-              ),
-            ),
-
-            const SizedBox(
-              height: 10,
-            ),
-
-            GridView.count(
-              shrinkWrap: true,
-              physics:
-                  const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _menu(
-                  context,
-                  'Teams',
-                  Icons.groups,
-                  const TeamsScreen(),
-                ),
-                _menu(
-                  context,
-                  'Players',
-                  Icons.person,
-                  const PlayersScreen(),
-                ),
-                _menu(
-                  context,
-                  'Schedules',
-                  Icons.calendar_month,
-                  const SchedulesScreen(),
-                ),
-                _menu(
-                  context,
-                  'Games',
-                  Icons.sports_soccer,
-                  const GamesScreen(),
-                ),
-                _menu(
-                  context,
-                  'Standings',
-                  Icons.emoji_events,
-                  const StandingsScreen(),
-                ),
-                _menu(
-                  context,
-                  'Registrations',
-                  Icons.app_registration,
-                  const RegistrationsScreen(),
-                ),
-                _menu(
-                  context,
-                  'Payments',
-                  Icons.payment,
-                  const PaymentsScreen(),
-                ),
-                _menu(
-                  context,
-                  'Scholarships',
-                  Icons.volunteer_activism,
-                  const ScholarshipScreen(),
-                ),
-                _menu(
-                  context,
-                  'Admin',
-                  Icons.admin_panel_settings,
-                  const admin.Screen(),
-                ),
-              ],
-            ),
-          ],
-        ),
+          Text(
+            activeAnnouncement
+                .message,
+          ),
+        ],
       ),
-    );
+    ),
+  ),
+
+const SizedBox(
+  height: 20,
+),
+
+const Text(
+  'League Overview',
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight:
+        FontWeight.bold,
+    color: dcsaNavy,
+  ),
+),
+
+const SizedBox(
+  height: 10,
+),
+
+Row(
+  children: [
+    Expanded(
+      child: _statCard(
+        'Teams',
+        TeamDataService
+            .teams.length
+            .toString(),
+        Icons.groups,
+      ),
+    ),
+    const SizedBox(
+      width: 10,
+    ),
+    Expanded(
+      child: _statCard(
+        'Players',
+        PlayerDataService
+            .players.length
+            .toString(),
+        Icons.person,
+      ),
+    ),
+  ],
+),
+
+const SizedBox(
+  height: 8,
+),
+
+Row(
+  children: [
+    Expanded(
+      child: _statCard(
+        'Coaches',
+        CoachDataService
+            .coaches.length
+            .toString(),
+        Icons.sports,
+      ),
+    ),
+    const SizedBox(
+      width: 10,
+    ),
+    Expanded(
+      child: _statCard(
+        'Referees',
+        RefereeDataService
+            .referees.length
+            .toString(),
+        Icons.gavel,
+      ),
+    ),
+  ],
+),
+
+const SizedBox(
+  height: 8,
+),
+
+Row(
+  children: [
+    Expanded(
+      child: _statCard(
+        'Scholarships',
+        ScholarshipDataService
+            .activeFamilyCount
+            .toString(),
+        Icons
+            .volunteer_activism,
+      ),
+    ),
+    const SizedBox(
+      width: 10,
+    ),
+    Expanded(
+      child: _statCard(
+        'Volunteer Hrs',
+        volunteerHours
+            .toStringAsFixed(
+          0,
+        ),
+        Icons.handshake,
+      ),
+    ),
+  ],
+),
+
+const SizedBox(
+  height: 24,
+),
+const Text(
+  'League Activity',
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight:
+        FontWeight.bold,
+    color: dcsaNavy,
+  ),
+),
+
+const SizedBox(
+  height: 10,
+),
+
+Card(
+  elevation: 3,
+  child: Padding(
+    padding:
+        const EdgeInsets.all(
+      16,
+    ),
+    child: Column(
+      children: [
+        ListTile(
+          leading: const Icon(
+            Icons
+                .app_registration,
+          ),
+          title: const Text(
+            'Registrations',
+          ),
+          trailing: Text(
+            RegistrationDataService
+                .registrations
+                .length
+                .toString(),
+            style:
+                const TextStyle(
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+        ),
+
+        const Divider(),
+
+        ListTile(
+          leading: const Icon(
+            Icons
+                .sports_soccer,
+          ),
+          title: const Text(
+            'Games Scheduled',
+          ),
+          trailing: Text(
+            GameDataService
+                .games.length
+                .toString(),
+            style:
+                const TextStyle(
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+        ),
+
+        const Divider(),
+
+        ListTile(
+          leading: const Icon(
+            Icons.people,
+          ),
+          title: const Text(
+            'Scholarship Families',
+          ),
+          trailing: Text(
+            ScholarshipDataService
+                .activeFamilyCount
+                .toString(),
+            style:
+                const TextStyle(
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
+const SizedBox(
+  height: 24,
+),
+
+const Text(
+  'Upcoming Games',
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight:
+        FontWeight.bold,
+    color: dcsaNavy,
+  ),
+),
+
+const SizedBox(
+  height: 10,
+),
+
+if (upcomingGames.isEmpty)
+  const Card(
+    child: Padding(
+      padding:
+          EdgeInsets.all(
+        20,
+      ),
+      child: Text(
+        'No scheduled games.',
+      ),
+    ),
+  ),
+
+...upcomingGames.map(
+  (game) => Card(
+    elevation: 3,
+    child: Padding(
+      padding:
+          const EdgeInsets.all(
+        20,
+      ),
+      child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment
+                .start,
+        children: [
+          Text(
+            '${game.homeTeam} vs ${game.awayTeam}',
+            style:
+                const TextStyle(
+              fontSize: 20,
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+
+          const Divider(),
+
+          Text(
+            '📅 ${game.gameDate}',
+          ),
+
+          const SizedBox(
+            height: 4,
+          ),
+
+          Text(
+            '⏰ ${game.gameTime}',
+          ),
+
+          const SizedBox(
+            height: 4,
+          ),
+
+          Text(
+            '📍 ${game.field}',
+          ),
+
+          if (game
+    .centerRefereeName
+    .isNotEmpty)
+  Padding(
+    padding:
+        const EdgeInsets.only(
+      top: 4,
+    ),
+    child: Column(
+      crossAxisAlignment:
+          CrossAxisAlignment
+              .start,
+      children: [
+        Text(
+          '⚖ Center: ${game.centerRefereeName}',
+        ),
+
+        if (game
+            .ar1RefereeName
+            .isNotEmpty)
+          Text(
+            '🚩 AR1: ${game.ar1RefereeName}',
+          ),
+
+        if (game
+            .ar2RefereeName
+            .isNotEmpty)
+          Text(
+            '🚩 AR2: ${game.ar2RefereeName}',
+          ),
+      ],
+    ),
+  ),
+        ],
+      ),
+    ),
+  ),
+),
+
+const SizedBox(
+  height: 24,
+),
+const Text(
+  'League Menu',
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight:
+        FontWeight.bold,
+    color: dcsaNavy,
+  ),
+),
+
+const SizedBox(
+  height: 10,
+),
+
+GridView.count(
+  shrinkWrap: true,
+  physics:
+      const NeverScrollableScrollPhysics(),
+  crossAxisCount: 2,
+  crossAxisSpacing: 12,
+  mainAxisSpacing: 12,
+  childAspectRatio: 1.15,
+  children: [
+    _menu(
+      context,
+      'Teams',
+      Icons.groups,
+      const TeamsScreen(),
+    ),
+    _menu(
+      context,
+      'Players',
+      Icons.person,
+      const PlayersScreen(),
+    ),
+    _menu(
+      context,
+      'Schedules',
+      Icons.calendar_month,
+      const SchedulesScreen(),
+    ),
+    _menu(
+      context,
+      'Games',
+      Icons.sports_soccer,
+      const GamesScreen(),
+    ),
+    _menu(
+      context,
+      'Standings',
+      Icons.emoji_events,
+      const StandingsScreen(),
+    ),
+    _menu(
+      context,
+      'Registrations',
+      Icons.app_registration,
+      const RegistrationsScreen(),
+    ),
+    _menu(
+      context,
+      'Payments',
+      Icons.payment,
+      const PaymentsScreen(),
+    ),
+    _menu(
+      context,
+      'Scholarships',
+      Icons.volunteer_activism,
+      const ScholarshipScreen(),
+    ),
+    _menu(
+      context,
+      'Admin',
+      Icons.admin_panel_settings,
+      const admin.Screen(),
+    ),
+  ],
+),
+      ],
+    ),
+  ),
+);
   }
 
   Widget _buildHeroBanner(

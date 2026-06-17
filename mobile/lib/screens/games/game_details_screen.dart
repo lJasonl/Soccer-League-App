@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/game.dart';
 import '../../services/game_data_service.dart';
+
 import 'edit_game_screen.dart';
 import 'edit_score_screen.dart';
 
@@ -29,7 +30,8 @@ class _GameDetailsScreenState
   }
 
   Future<void> _deleteGame() async {
-    final confirmed = await showDialog<bool>(
+    final confirmed =
+        await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -68,7 +70,8 @@ class _GameDetailsScreenState
     );
 
     if (confirmed == true) {
-      await GameDataService.deleteGame(
+      await GameDataService
+          .deleteGame(
         game.id,
       );
 
@@ -126,7 +129,9 @@ class _GameDetailsScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -137,25 +142,30 @@ class _GameDetailsScreenState
             icon: const Icon(
               Icons.scoreboard,
             ),
-            onPressed: _editScore,
+            onPressed:
+                _editScore,
           ),
           IconButton(
             icon: const Icon(
               Icons.edit,
             ),
-            onPressed: _editGame,
+            onPressed:
+                _editGame,
           ),
           IconButton(
             icon: const Icon(
               Icons.delete,
             ),
-            onPressed: _deleteGame,
+            onPressed:
+                _deleteGame,
           ),
         ],
       ),
       body: Padding(
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(
+          16,
+        ),
         child: Card(
           child: Padding(
             padding:
@@ -193,21 +203,45 @@ class _GameDetailsScreenState
                   'Field: ${game.field}',
                 ),
 
-                // Admin-only area
-                if (game.refereeName
-                    .isNotEmpty) ...[
-                  const SizedBox(
-                    height: 8,
-                  ),
+                const SizedBox(
+                  height: 16,
+                ),
+
+                if (game
+                    .centerRefereeName
+                    .isNotEmpty)
                   Text(
-                    'Assigned Referee: ${game.refereeName}',
+                    'Center Referee: ${game.centerRefereeName}',
                     style:
                         const TextStyle(
                       fontWeight:
                           FontWeight.bold,
                     ),
                   ),
-                ],
+
+                if (game
+                    .ar1RefereeName
+                    .isNotEmpty)
+                  Text(
+                    'AR1: ${game.ar1RefereeName}',
+                    style:
+                        const TextStyle(
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+
+                if (game
+                    .ar2RefereeName
+                    .isNotEmpty)
+                  Text(
+                    'AR2: ${game.ar2RefereeName}',
+                    style:
+                        const TextStyle(
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
 
                 const SizedBox(
                   height: 24,
