@@ -4,6 +4,7 @@ import '../../services/game_data_service.dart';
 import 'add_game_screen.dart';
 import 'edit_game_screen.dart';
 import 'game_result_screen.dart';
+import '../../services/session_service.dart';
 
 class SchedulesScreen extends StatefulWidget {
   const SchedulesScreen({super.key});
@@ -61,6 +62,11 @@ class _SchedulesScreenState
 
   @override
   Widget build(BuildContext context) {
+    final role =
+    SessionService
+        .getCurrentUser()
+        ?.role ??
+    'Parent';
     final games = GameDataService.games;
 
     return Scaffold(
@@ -120,21 +126,22 @@ class _SchedulesScreenState
                 mainAxisSize:
                     MainAxisSize.min,
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.edit,
-                    ),
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              EditGameScreen(
-                            game: game,
-                          ),
-                        ),
-                      );
-
+                  if (role == 'Admin' ||
+    role == 'Coach')
+  IconButton(
+    icon: const Icon(
+      Icons.edit,
+    ),
+    onPressed: () async {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              EditGameScreen(
+            game: game,
+          ),
+        ),
+      );
                       setState(() {});
                     },
                   ),

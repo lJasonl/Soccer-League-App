@@ -8,6 +8,7 @@ import '../../services/team_data_service.dart';
 import '../players/add_player_screen.dart';
 import '../players/player_details_screen.dart';
 import 'edit_team_screen.dart';
+import '../../services/session_service.dart';
 
 class TeamDetailsScreen extends StatefulWidget {
   final Team team;
@@ -146,6 +147,11 @@ class _TeamDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final role =
+    SessionService
+        .getCurrentUser()
+        ?.role ??
+    'Parent';
     final teamPlayers =
         LeagueDataService
             .getPlayersForTeam(
@@ -209,27 +215,30 @@ class _TeamDetailsScreenState
           ),
         ],
       ),
-      floatingActionButton:
-          FloatingActionButton.extended(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) =>
-                  AddPlayerScreen(
-                teamId:
-                    widget.team.id,
-              ),
-            ),
-          );
+    floatingActionButton:
+    (role == 'Admin' ||
+            role == 'Coach')
+        ? FloatingActionButton.extended(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      AddPlayerScreen(
+                    teamId:
+                        widget.team.id,
+                  ),
+                ),
+              );
 
           setState(() {});
         },
         icon: const Icon(Icons.person_add),
         label: const Text(
-          'Add Player',
-        ),
-      ),
+  'Add Player',
+),
+)
+        : null,
       body: ListView(
         padding:
             const EdgeInsets.all(16),
@@ -462,17 +471,19 @@ class _TeamDetailsScreenState
                   ),
                 ),
                 trailing:
-                    IconButton(
-                  icon:
-                      const Icon(
-                    Icons.delete,
-                  ),
-                  onPressed: () {
-                    _deletePlayer(
-                      player,
-                    );
-                  },
-                ),
+    (role == 'Admin' ||
+            role == 'Coach')
+        ? IconButton(
+            icon: const Icon(
+              Icons.delete,
+            ),
+            onPressed: () {
+              _deletePlayer(
+                player,
+              );
+            },
+          )
+        : null,
                 onTap: () async {
                   await Navigator.push(
                     context,
