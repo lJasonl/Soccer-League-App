@@ -54,29 +54,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-  title: const Text(
-    'Darke County Soccer Association',
-  ),
-  actions: [
-    IconButton(
-      icon: const Icon(
-        Icons.logout,
-      ),
-      tooltip: 'Logout',
-      onPressed: () async {
-        await SessionService.logout();
+        title: const Text('Darke County Soccer Association'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () async {
+              await SessionService.logout();
 
-        if (context.mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/login',
-            (route) => false,
-          );
-        }
-      },
-    ),
-  ],
-),
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) => false,
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -86,136 +82,145 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             const SizedBox(height: 20),
 
-            const Text(
-              'League Overview',
-              style: TextStyle(
-                fontSize: 24,
+  if (role != 'Parent') ...[
+  const Text(
+    'League Overview',
+    style: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: dcsaNavy,
+    ),
+  ),
+
+  const SizedBox(height: 10),
+
+  Row(
+    children: [
+      Expanded(
+        child: _statCard(
+          'Teams',
+          TeamDataService.teams.length.toString(),
+          Icons.groups,
+        ),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: _statCard(
+          'Players',
+          PlayerDataService.players.length.toString(),
+          Icons.person,
+        ),
+      ),
+    ],
+  ),
+
+  const SizedBox(height: 8),
+
+  Row(
+    children: [
+      Expanded(
+        child: _statCard(
+          'Coaches',
+          CoachDataService.coaches.length.toString(),
+          Icons.sports,
+        ),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: _statCard(
+          'Referees',
+          RefereeDataService.referees.length.toString(),
+          Icons.gavel,
+        ),
+      ),
+    ],
+  ),
+
+  const SizedBox(height: 8),
+
+  Row(
+    children: [
+      Expanded(
+        child: _statCard(
+          'Scholarships',
+          ScholarshipDataService.activeFamilyCount.toString(),
+          Icons.volunteer_activism,
+        ),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: _statCard(
+          'Volunteer Hrs',
+          volunteerHours.toStringAsFixed(0),
+          Icons.handshake,
+        ),
+      ),
+    ],
+  ),
+
+  const SizedBox(height: 24),
+
+  if (role != 'Parent') ...[
+  const Text(
+    'League Activity',
+    style: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: dcsaNavy,
+    ),
+  ),
+
+  const SizedBox(height: 10),
+
+  Card(
+    elevation: 3,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.app_registration),
+            title: const Text('Registrations'),
+            trailing: Text(
+              RegistrationDataService.registrations.length.toString(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: dcsaNavy,
               ),
             ),
+          ),
 
-            const SizedBox(height: 10),
+          const Divider(),
 
-            Row(
-              children: [
-                Expanded(
-                  child: _statCard(
-                    'Teams',
-                    TeamDataService.teams.length.toString(),
-                    Icons.groups,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _statCard(
-                    'Players',
-                    PlayerDataService.players.length.toString(),
-                    Icons.person,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 8),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _statCard(
-                    'Coaches',
-                    CoachDataService.coaches.length.toString(),
-                    Icons.sports,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _statCard(
-                    'Referees',
-                    RefereeDataService.referees.length.toString(),
-                    Icons.gavel,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 8),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _statCard(
-                    'Scholarships',
-                    ScholarshipDataService.activeFamilyCount.toString(),
-                    Icons.volunteer_activism,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _statCard(
-                    'Volunteer Hrs',
-                    volunteerHours.toStringAsFixed(0),
-                    Icons.handshake,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 24),
-
-            const Text(
-              'League Activity',
-              style: TextStyle(
-                fontSize: 24,
+          ListTile(
+            leading: const Icon(Icons.sports_soccer),
+            title: const Text('Games Scheduled'),
+            trailing: Text(
+              GameDataService.games.length.toString(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: dcsaNavy,
               ),
             ),
+          ),
 
-            const SizedBox(height: 10),
+          const Divider(),
 
-            Card(
-              elevation: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.app_registration),
-                      title: const Text('Registrations'),
-                      trailing: Text(
-                        RegistrationDataService.registrations.length.toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(Icons.sports_soccer),
-                      title: const Text('Games Scheduled'),
-                      trailing: Text(
-                        GameDataService.games.length.toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(Icons.people),
-                      title: const Text('Scholarship Families'),
-                      trailing: Text(
-                        ScholarshipDataService.activeFamilyCount.toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
+          ListTile(
+            leading: const Icon(Icons.people),
+            title: const Text('Scholarship Families'),
+            trailing: Text(
+              ScholarshipDataService.activeFamilyCount.toString(),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
               ),
             ),
+          ),
+        ],
+      ),
+    ),
+  ),
 
-            const SizedBox(height: 24),
+  const SizedBox(height: 24),
+],
 
             const Text(
               'Upcoming Games',
@@ -301,72 +306,70 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const PlayersScreen(),
                   ),
 
-  if (role == 'Admin' ||
-    role == 'Coach' ||
-    role == 'Parent' ||
-    role == 'Referee')
-  _menu(
-    context,
-    'Schedules',
-    Icons.calendar_month,
-    const SchedulesScreen(),
-  ),
+                if (role == 'Admin' ||
+                    role == 'Coach' ||
+                    role == 'Parent' ||
+                    role == 'Referee')
+                  _menu(
+                    context,
+                    'Schedules',
+                    Icons.calendar_month,
+                    const SchedulesScreen(),
+                  ),
 
-if (role == 'Admin' ||
-    role == 'Coach' ||
-    role == 'Referee')
-  _menu(
-    context,
-    'Games',
-    Icons.sports_soccer,
-    const GamesScreen(),
-  ),
+                if (role == 'Admin' || role == 'Coach' || role == 'Referee')
+                  _menu(
+                    context,
+                    'Games',
+                    Icons.sports_soccer,
+                    const GamesScreen(),
+                  ),
 
-if (role == 'Admin' ||
-    role == 'Coach' ||
-    role == 'Parent' ||
-    role == 'Referee')
-  _menu(
-    context,
-    'Standings',
-    Icons.emoji_events,
-    const StandingsScreen(),
-  ),
+                if (role == 'Admin' ||
+                    role == 'Coach' ||
+                    role == 'Parent' ||
+                    role == 'Referee')
+                  _menu(
+                    context,
+                    'Standings',
+                    Icons.emoji_events,
+                    const StandingsScreen(),
+                  ),
 
-if (role == 'Admin')
-  _menu(
-    context,
-    'Registrations',
-    Icons.app_registration,
-    const RegistrationsScreen(),
-  ),
+                if (role == 'Admin')
+                  _menu(
+                    context,
+                    'Registrations',
+                    Icons.app_registration,
+                    const RegistrationsScreen(),
+                  ),
 
-if (role == 'Admin')
-  _menu(
-    context,
-    'Payments',
-    Icons.payment,
-    const PaymentsScreen(),
-  ),
+                if (role == 'Admin')
+                  _menu(
+                    context,
+                    'Payments',
+                    Icons.payment,
+                    const PaymentsScreen(),
+                  ),
 
-if (role == 'Admin')
-  _menu(
-    context,
-    'Scholarships',
-    Icons.volunteer_activism,
-    const ScholarshipScreen(),
-  ),
+                if (role == 'Admin')
+                  _menu(
+                    context,
+                    'Scholarships',
+                    Icons.volunteer_activism,
+                    const ScholarshipScreen(),
+                  ),
 
-if (role == 'Admin')
-  _menu(
-    context,
-    'Admin',
-    Icons.admin_panel_settings,
-    const admin.Screen(),
-  ),
+                if (role == 'Admin')
+                  _menu(
+                    context,
+                    'Admin',
+                    Icons.admin_panel_settings,
+                    const admin.Screen(),
+                  ),
               ],
             ),
-          ],
+  ],
         ),
       ),
     );
