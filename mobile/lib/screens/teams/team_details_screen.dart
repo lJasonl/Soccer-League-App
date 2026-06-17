@@ -184,36 +184,40 @@ class _TeamDetailsScreenState
           'unpaid';
     }).length;
 
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           widget.team.name,
         ),
-        actions: [
-          IconButton(
-            icon:
-                const Icon(Icons.edit),
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      EditTeamScreen(
-                    team: widget.team,
-                  ),
-                ),
-              );
+ actions: [
+  if (role == 'Admin' ||
+      role == 'Coach')
+    IconButton(
+      icon: const Icon(Icons.edit),
+      onPressed: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => EditTeamScreen(
+              team: widget.team,
+            ),
+          ),
+        );
 
-              setState(() {});
-            },
-          ),
-          IconButton(
-            icon:
-                const Icon(Icons.delete),
-            onPressed:
-                _deleteTeam,
-          ),
-        ],
+        setState(() {});
+      },
+    ),
+
+  if (role == 'Admin' ||
+      role == 'Coach')
+    IconButton(
+      icon: const Icon(Icons.delete),
+      onPressed: () {
+        _deleteTeam();
+      },
+    ),
+],
       ),
     floatingActionButton:
     (role == 'Admin' ||
@@ -223,21 +227,17 @@ class _TeamDetailsScreenState
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                      AddPlayerScreen(
-                    teamId:
-                        widget.team.id,
+                  builder: (_) => AddPlayerScreen(
+                    teamId: widget.team.id,
                   ),
                 ),
               );
 
-          setState(() {});
-        },
-        icon: const Icon(Icons.person_add),
-        label: const Text(
-  'Add Player',
-),
-)
+              setState(() {});
+            },
+            icon: const Icon(Icons.person_add),
+            label: const Text('Add Player'),
+          )
         : null,
       body: ListView(
         padding:
