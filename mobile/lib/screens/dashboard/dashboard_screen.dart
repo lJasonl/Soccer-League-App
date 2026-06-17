@@ -220,14 +220,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ),
 
   const SizedBox(height: 24),
+  ],
 ],
-
             const Text(
               'Upcoming Games',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: dcsaNavy,
+                color: Color.fromRGBO(11, 42, 91, 1),
               ),
             ),
 
@@ -368,11 +368,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const admin.Screen(),
                   ),
               ],
-            ),
-  ],
-        ),
-      ),
-    );
+            ), // GridView.count
+          ],
+        ), // Column
+      ), // SingleChildScrollView
+    ); // Scaffold
   }
 
   Widget _buildHeroBanner(String seasonName) {
