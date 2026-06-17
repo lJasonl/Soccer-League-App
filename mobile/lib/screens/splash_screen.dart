@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../services/session_service.dart';
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({
     super.key,
@@ -17,13 +15,13 @@ class _SplashScreenState
   @override
   void initState() {
     super.initState();
-    _checkLogin();
+    _goToLogin();
   }
 
-  Future<void> _checkLogin() async {
+  Future<void> _goToLogin() async {
     await Future.delayed(
       const Duration(
-        seconds: 2,
+        seconds: 4,
       ),
     );
 
@@ -31,22 +29,10 @@ class _SplashScreenState
       return;
     }
 
-    final currentUserId =
-        SessionService
-            .getCurrentUserId();
-
-    if (currentUserId != null &&
-        currentUserId.isNotEmpty) {
-      Navigator.pushReplacementNamed(
-        context,
-        '/dashboard',
-      );
-    } else {
-      Navigator.pushReplacementNamed(
-        context,
-        '/login',
-      );
-    }
+    Navigator.pushReplacementNamed(
+      context,
+      '/login',
+    );
   }
 
   @override
@@ -63,8 +49,7 @@ class _SplashScreenState
             ),
             child: Column(
               mainAxisAlignment:
-                  MainAxisAlignment
-                      .center,
+                  MainAxisAlignment.center,
               children: [
                 Image.asset(
                   'assets/images/dcsa_logo.png',
