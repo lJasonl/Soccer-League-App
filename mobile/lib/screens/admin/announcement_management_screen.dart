@@ -74,6 +74,160 @@ class _AnnouncementManagementScreenState
     );
   }
 
+  Future<void> _editAnnouncement(
+    Announcement announcement,
+  ) async {
+    final titleController =
+        TextEditingController(
+      text: announcement.title,
+    );
+
+    final messageController =
+        TextEditingController(
+      text: announcement.message,
+    );
+
+    final result =
+        await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'Edit Announcement',
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize:
+                  MainAxisSize.min,
+              children: [
+                TextField(
+                  controller:
+                      titleController,
+                  decoration:
+                      const InputDecoration(
+                    labelText:
+                        'Title',
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  controller:
+                      messageController,
+                  maxLines: 4,
+                  decoration:
+                      const InputDecoration(
+                    labelText:
+                        'Message',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  false,
+                );
+              },
+              child: const Text(
+                'Cancel',
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  true,
+                );
+              },
+              child: const Text(
+                'Save',
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result != true) {
+      return;
+    }
+
+    await AnnouncementDataService
+        .updateAnnouncement(
+      Announcement(
+        id: announcement.id,
+        title: titleController.text
+            .trim(),
+        message:
+            messageController.text
+                .trim(),
+        isActive:
+            announcement.isActive,
+      ),
+    );
+
+    setState(() {});
+  }
+
+  Future<void> _deleteAnnouncement(
+    Announcement announcement,
+  ) async {
+    final confirmed =
+        await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'Delete Announcement?',
+          ),
+          content: const Text(
+            'This action cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  false,
+                );
+              },
+              child: const Text(
+                'Cancel',
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  true,
+                );
+              },
+              child: const Text(
+                'Delete',
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) {
+      return;
+    }
+
+    await AnnouncementDataService
+        .deleteAnnouncement(
+      announcement.id,
+    );
+
+    setState(() {});
+  }
+
   @override
   Widget build(
     BuildContext context,
@@ -159,6 +313,83 @@ class _AnnouncementManagementScreenState
                             .message,
                       ),
                       trailing:
+                          PopupMenuButton<
+                              String>(
+                        onSelected:
+                            (
+                          value,
+                        ) async {
+                          switch (
+                              value) {
+                            case 'edit':
+                              await _editAnnouncement(
+                                announcement,
+                              );
+                              break;
+
+                            case 'activate':
+                              await AnnouncementDataService
+                                  .setActiveAnnouncement(
+                                announcement
+                                    .id,
+                              );
+                              setState(
+                                () {},
+                              );
+                              break;
+
+                            case 'deactivate':
+                              await AnnouncementDataService
+                                  .deactivateAnnouncement(
+                                announcement
+                                    .id,
+                              );
+                              setState(
+                                () {},
+                              );
+                              break;
+
+                            case 'delete':
+                              await _deleteAnnouncement(
+                                announcement,
+                              );
+                              break;
+                          }
+                        },
+                        itemBuilder:
+                            (
+                          context,
+                        ) =>
+                            [
+                          const PopupMenuItem(
+                            value:
+                                'edit',
+                            child: Text(
+                              'Edit Announcement',
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: announcement
+                                    .isActive
+                                ? 'deactivate'
+                                : 'activate',
+                            child: Text(
+                              announcement
+                                      .isActive
+                                  ? 'Deactivate'
+                                  : 'Set Active',
+                            ),
+                          ),
+                          const PopupMenuItem(
+                            value:
+                                'delete',
+                            child: Text(
+                              'Delete',
+                            ),
+                          ),
+                        ],
+                      ),
+                      leading:
                           announcement
                                   .isActive
                               ? const Chip(
