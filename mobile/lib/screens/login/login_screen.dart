@@ -1,43 +1,144 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+import '../../models/user.dart';
+import '../../services/session_service.dart';
+import '../../services/user_data_service.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({
+    super.key,
+  });
+
+  @override
+  State<LoginScreen> createState() =>
+      _LoginScreenState();
+}
+
+class _LoginScreenState
+    extends State<LoginScreen> {
+  AppUser? _selectedUser;
 
   @override
   Widget build(BuildContext context) {
+    final users =
+        UserDataService.users
+            .where(
+              (user) => user.isActive,
+            )
+            .toList();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text(
+          'Login',
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding:
+            const EdgeInsets.all(
+          24,
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment:
+              CrossAxisAlignment
+                  .stretch,
           children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+            const Text(
+              'Select User',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight:
+                    FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 16),
-
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-              ),
+            const SizedBox(
+              height: 24,
             ),
 
-            const SizedBox(height: 24),
+            Expanded(
+              child: users.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'No active users available.',
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount:
+                          users.length,
+                      itemBuilder:
+                          (
+                        context,
+                        index,
+                      ) {
+                        final user =
+                            users[index];
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/dashboard');
-              },
-              child: const Text('Login'),
+                        return RadioListTile<
+                            AppUser>(
+                          value: user,
+                          groupValue:
+                              _selectedUser,
+                          title: Text(
+                            user.name,
+                          ),
+                          subtitle: Text(
+                            '${user.role} • ${user.email}',
+                          ),
+                          onChanged:
+                              (
+                            value,
+                          ) {
+                            setState(
+                              () {
+                                _selectedUser =
+                                    value;
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            SizedBox(
+              height: 52,
+              child:
+                  ElevatedButton(
+                onPressed:
+                    _selectedUser ==
+                            null
+                        ? null
+                        : () async {
+                            await SessionService
+                                .setCurrentUserId(
+                              _selectedUser!
+                                  .id,
+                            );
+
+                            if (!context
+                                .mounted) {
+                              return;
+                            }
+
+                            Navigator.pushReplacementNamed(
+                              context,
+                              '/dashboard',
+                            );
+                          },
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight:
+                        FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

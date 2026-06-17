@@ -31,6 +31,9 @@ class StorageService {
   static const String divisionsBox =
       'divisions';
 
+  static const String sessionBox =
+      'session';
+
   static Future<void> initialize() async {
     await Hive.openBox(teamsBox);
     await Hive.openBox(playersBox);
@@ -57,6 +60,10 @@ class StorageService {
 
     await Hive.openBox(
       divisionsBox,
+    );
+
+    await Hive.openBox(
+      sessionBox,
     );
   }
 
@@ -121,6 +128,12 @@ class StorageService {
   static Box getDivisionsBox() {
     return Hive.box(
       divisionsBox,
+    );
+  }
+
+  static Box getSessionBox() {
+    return Hive.box(
+      sessionBox,
     );
   }
 }
