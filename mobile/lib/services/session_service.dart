@@ -1,5 +1,8 @@
 import 'package:hive/hive.dart';
 
+import '../models/user.dart';
+import 'user_data_service.dart';
+
 class SessionService {
   static const String sessionBox =
       'session';
@@ -36,6 +39,28 @@ class SessionService {
     return box.get(
       currentUserKey,
     );
+  }
+
+  static AppUser? getCurrentUser() {
+    final userId =
+        getCurrentUserId();
+
+    if (userId == null) {
+      return null;
+    }
+
+    try {
+      return UserDataService.users
+          .firstWhere(
+        (user) => user.id == userId,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static bool isLoggedIn() {
+    return getCurrentUser() != null;
   }
 
   static Future<void> logout() async {
