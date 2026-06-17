@@ -1,20 +1,70 @@
 import 'package:flutter/material.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+import '../services/session_service.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  State<SplashScreen> createState() =>
+      _SplashScreenState();
+}
+
+class _SplashScreenState
+    extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkLogin();
+  }
+
+  Future<void> _checkLogin() async {
+    await Future.delayed(
+      const Duration(
+        seconds: 2,
+      ),
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    final currentUserId =
+        SessionService
+            .getCurrentUserId();
+
+    if (currentUserId != null &&
+        currentUserId.isNotEmpty) {
+      Navigator.pushReplacementNamed(
+        context,
+        '/dashboard',
+      );
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        '/login',
+      );
+    }
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
+            padding:
+                const EdgeInsets.symmetric(
               horizontal: 24,
             ),
             child: Column(
               mainAxisAlignment:
-                  MainAxisAlignment.center,
+                  MainAxisAlignment
+                      .center,
               children: [
                 Image.asset(
                   'assets/images/dcsa_logo.png',
@@ -27,7 +77,8 @@ class SplashScreen extends StatelessWidget {
 
                 const Text(
                   'Darke County Soccer Association',
-                  textAlign: TextAlign.center,
+                  textAlign:
+                      TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight:
@@ -41,10 +92,13 @@ class SplashScreen extends StatelessWidget {
 
                 Text(
                   'Youth Soccer League Management',
-                  textAlign: TextAlign.center,
+                  textAlign:
+                      TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey.shade700,
+                    color: Colors
+                        .grey
+                        .shade700,
                   ),
                 ),
 
@@ -58,8 +112,11 @@ class SplashScreen extends StatelessWidget {
                     horizontal: 16,
                     vertical: 8,
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
+                  decoration:
+                      BoxDecoration(
+                    color: Colors
+                        .grey
+                        .shade200,
                     borderRadius:
                         BorderRadius.circular(
                       20,
@@ -80,7 +137,8 @@ class SplashScreen extends StatelessWidget {
 
                 const Text(
                   'Teams • Players • Schedules • Standings',
-                  textAlign: TextAlign.center,
+                  textAlign:
+                      TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
                   ),
@@ -90,25 +148,14 @@ class SplashScreen extends StatelessWidget {
                   height: 48,
                 ),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/login',
-                      );
-                    },
-                    child: const Text(
-                      'Enter DCSA App',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight:
-                            FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                const CircularProgressIndicator(),
+
+                const SizedBox(
+                  height: 24,
+                ),
+
+                const Text(
+                  'Loading...',
                 ),
 
                 const SizedBox(
