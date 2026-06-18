@@ -82,7 +82,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             const SizedBox(height: 20),
 
-  if (role != 'Parent') ...[
+  if (role == 'Admin') ...[
   const Text(
     'League Overview',
     style: TextStyle(
@@ -160,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   const SizedBox(height: 24),
 
-  if (role != 'Parent') ...[
+ if (role == 'Admin') ...[
   const Text(
     'League Activity',
     style: TextStyle(

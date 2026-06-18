@@ -63,7 +63,11 @@ class _EditTeamScreenState
   }
 
   Future<void> _saveTeam() async {
-    final updatedTeam = Team(
+    print(
+    'Saving coach: ${_selectedCoach?.fullName} '
+    '(${_selectedCoach?.id})',
+  );
+  final updatedTeam = Team(
       id: widget.team.id,
       name: _teamNameController.text
           .trim(),
@@ -90,21 +94,16 @@ class _EditTeamScreenState
   Widget build(
     BuildContext context,
   ) {
+    print(
+  'Coach count: ${CoachDataService.coaches.length}',
+);
     final availableCoaches =
-        CoachDataService.coaches.where(
-      (coach) {
-        if (coach.id ==
-            widget.team.coachId) {
-          return true;
-        }
-
-        return coach.isActive &&
-            !TeamDataService
-                .isCoachAssigned(
-              coach.id,
-            );
-      },
-    ).toList();
+    CoachDataService.coaches
+        .where(
+          (coach) =>
+              coach.isActive,
+        )
+        .toList();
 
     final List<Division>
         divisions =

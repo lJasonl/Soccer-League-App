@@ -152,6 +152,14 @@ class _TeamDetailsScreenState
         .getCurrentUser()
         ?.role ??
     'Parent';
+    final currentUser =
+    SessionService.getCurrentUser();
+
+final canManageTeam =
+    role == 'Admin' ||
+    (role == 'Coach' &&
+        widget.team.coachId ==
+            currentUser?.id);
     final teamPlayers =
         LeagueDataService
             .getPlayersForTeam(
@@ -191,8 +199,7 @@ class _TeamDetailsScreenState
           widget.team.name,
         ),
  actions: [
-  if (role == 'Admin' ||
-      role == 'Coach')
+  if (canManageTeam)
     IconButton(
       icon: const Icon(Icons.edit),
       onPressed: () async {
@@ -204,13 +211,14 @@ class _TeamDetailsScreenState
             ),
           ),
         );
+        
+await TeamDataService.loadTeams();
 
         setState(() {});
       },
     ),
 
-  if (role == 'Admin' ||
-      role == 'Coach')
+  if (role == 'Admin')
     IconButton(
       icon: const Icon(Icons.delete),
       onPressed: () {
@@ -220,8 +228,7 @@ class _TeamDetailsScreenState
 ],
       ),
     floatingActionButton:
-    (role == 'Admin' ||
-            role == 'Coach')
+    canManageTeam
         ? FloatingActionButton.extended(
             onPressed: () async {
               await Navigator.push(

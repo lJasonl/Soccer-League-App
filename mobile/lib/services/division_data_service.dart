@@ -7,42 +7,75 @@ class DivisionDataService {
 
   static Future<void>
       loadDivisions() async {
-    final box =
-        StorageService
-            .getDivisionsBox();
+    final box = StorageService.getDivisionsBox();
 
-    if (box.isEmpty) {
-      divisions = [
-        const Division(
-          id: '1',
-          name: 'U7',
-          isActive: true,
-        ),
-        const Division(
-          id: '2',
-          name: 'U9',
-          isActive: true,
-        ),
-        const Division(
-          id: '3',
-          name: 'U11',
-          isActive: true,
-        ),
-        const Division(
-          id: '4',
-          name: 'U13',
-          isActive: true,
-        ),
-        const Division(
-          id: '5',
-          name: 'U15',
-          isActive: true,
-        ),
-      ];
+if (box.isEmpty) {
+  divisions = [
+    const Division(
+      id: '0',
+      name: 'U6',
+      isActive: true,
+    ),
+    const Division(
+      id: '1',
+      name: 'U7',
+      isActive: true,
+    ),
+    const Division(
+      id: '2',
+      name: 'U8',
+      isActive: true,
+    ),
+    const Division(
+      id: '3',
+      name: 'U9',
+      isActive: true,
+    ),
+    const Division(
+      id: '4',
+      name: 'U10',
+      isActive: true,
+    ),
+    const Division(
+      id: '5',
+      name: 'U11',
+      isActive: true,
+    ),
+    const Division(
+      id: '6',
+      name: 'U12',
+      isActive: true,
+    ),
+    const Division(
+      id: '7',
+      name: 'U13',
+      isActive: true,
+    ),
+    const Division(
+      id: '8',
+      name: 'U14',
+      isActive: true,
+    ),
+    const Division(
+      id: '9',
+      name: 'U15',
+      isActive: true,
+    ),
+    const Division(
+      id: '10',
+      name: 'U16',
+      isActive: true,
+    ),
+    const Division(
+      id: '11',
+      name: 'U17',
+      isActive: true,
+    ),
+  ];
 
-      await saveDivisions();
-      return;
-    }
+  await saveDivisions();
+  return;
+}
 
     divisions =
         box.values.map((item) {

@@ -5,10 +5,45 @@ class UserDataService {
   static List<AppUser> users = [];
 
   static Future<void> loadUsers() async {
-    final box =
-        StorageService.getUsersBox();
+    final box = StorageService.getUsersBox();
 
     if (box.isEmpty) {
+      users = [
+        AppUser(
+          id: '1',
+          name: 'League Admin',
+          email: 'admin@league.com',
+          role: 'Admin',
+          isActive: true,
+          createdAt: DateTime.now(),
+        ),
+        AppUser(
+          id: '2',
+          name: 'Coach Smith',
+          email: 'coach@league.com',
+          role: 'Coach',
+          isActive: true,
+          createdAt: DateTime.now(),
+        ),
+        AppUser(
+          id: '3',
+          name: 'Referee Jones',
+          email: 'referee@league.com',
+          role: 'Referee',
+          isActive: true,
+          createdAt: DateTime.now(),
+        ),
+        AppUser(
+          id: '4',
+          name: 'Parent User',
+          email: 'parent@league.com',
+          role: 'Parent',
+          isActive: true,
+          createdAt: DateTime.now(),
+        ),
+      ];
+
+      await saveUsers();
       return;
     }
 
