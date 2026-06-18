@@ -75,6 +75,18 @@ class _AddGameScreenState
   }
 
   Future<void> _saveGame() async {
+
+  if (_homeTeam == _awayTeam) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Home Team and Away Team must be different.',
+        ),
+      ),
+    );
+    return;
+}
+  // existing code below
     if (!_formKey.currentState!
         .validate()) {
       return;
