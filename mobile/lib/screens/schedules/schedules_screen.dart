@@ -67,26 +67,31 @@ class _SchedulesScreenState
         .getCurrentUser()
         ?.role ??
     'Parent';
+    print('SCHEDULE ROLE = $role');
     final games = GameDataService.games;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Schedule'),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) =>
-                  const AddGameScreen(),
-            ),
-          );
+floatingActionButton:
+    role == 'Admin'
+        ? FloatingActionButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const AddGameScreen(),
+                ),
+              );
 
-          setState(() {});
-        },
-        child: const Icon(Icons.add),
-      ),
+              setState(() {});
+            },
+            child: const Icon(Icons.add),
+          )
+        : null,
+
       body: ListView.builder(
         itemCount: games.length,
         itemBuilder: (context, index) {
@@ -98,19 +103,22 @@ class _SchedulesScreenState
               vertical: 6,
             ),
             child: ListTile(
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        GameResultScreen(
-                      game: game,
-                    ),
-                  ),
-                );
+onTap: (role == 'Admin' ||
+        role == 'Coach' ||
+        role == 'Referee')
+    ? () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => GameResultScreen(
+              game: game,
+            ),
+          ),
+        );
 
-                setState(() {});
-              },
+        setState(() {});
+      }
+    : null,
               leading: const Icon(
                 Icons.sports_soccer,
               ),
@@ -145,16 +153,17 @@ class _SchedulesScreenState
                       setState(() {});
                     },
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.delete,
-                    ),
-                    onPressed: () {
-                      _deleteGame(
-                        game.id,
-                      );
-                    },
-                  ),
+                  if (role == 'Admin')
+  IconButton(
+    icon: const Icon(
+      Icons.delete,
+    ),
+    onPressed: () {
+      _deleteGame(
+        game.id,
+      );
+    },
+  ),
                 ],
               ),
             ),
